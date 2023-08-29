@@ -1,7 +1,6 @@
 pandas
 xlrd
 plotly.express
-json
 ogr
 geopandas
 aacgmv2
