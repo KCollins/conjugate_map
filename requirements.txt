@@ -8,3 +8,4 @@ datetime
 numpy
 gpxpy
 geopack
+lxml
