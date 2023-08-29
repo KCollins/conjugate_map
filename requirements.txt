@@ -7,4 +7,3 @@ aacgmv2
 datetime
 numpy
 gpxpy
-gpxpy.gpx
