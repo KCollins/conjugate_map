@@ -7,3 +7,4 @@ aacgmv2
 datetime
 numpy
 gpxpy
+geopack
