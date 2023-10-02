@@ -213,20 +213,24 @@ def conjcalc(gdf, latname="GLAT", lonname="GLON", dtime = dt.datetime.now(), is_
 
 ############################################################################################################################### 
 
-def calc_mlat_rings(mlats,ut=datetime.datetime.now(), is_saved = 'False'):
+def calc_mlat_rings(mlats,ut=datetime.datetime.now(), is_verbose = False, is_saved = 'False'):
     """
     Calculate the geographic latitudes and longitudes of a circle of points
     for a list of magnetic latitudes.
     
     Arguments:
-        mlats: list of magnetic latitudes
-        dt   : datetime.datetime used in AACGMv2 Conversion
+        mlats       : list of magnetic latitudes
+        ut          : datetime.datetime used in AACGMv2 conversion; by default, ut=datetime.datetime.now()
+        is_verbose  : if set to True/1, prints debugging text
+        is_saved    : if is_saved == True, saves .gpx versions to local output directory
+    
         
     Returns:
         mlats_dct: dictionary with geographic latitude and longitude
                     points for each of the specified magnetic latitudes
     
-    If is_saved == True, saves .gpx versions to local output directory.
+    Example use: Saves .gpx magnetic graticules for 1 January 2020 every 5 degrees latitude.
+                 rings = calc_mlat_rings(list(range(-90, 90, 5)), ut = datetime.datetime(2020, 1, 1), is_saved = True)
     """
     mlons = np.arange(0,360)
     mlats_dct   = {}
@@ -241,7 +245,7 @@ def calc_mlat_rings(mlats,ut=datetime.datetime.now(), is_saved = 'False'):
         mlats_dct[mlat] = {'glats':glats, 'glons':glons}
         
         if(is_saved == True):
-            print('Saving magnetic graticule for ' +str(mlat) + ' degrees magnetic latitude.')
+            if is_verbose: print('Saving magnetic graticule for ' +str(mlat) + ' degrees magnetic latitude.')
             filename = 'Graticule_ ' + str(mlat) + '_' + str(ut)
             directory = 'output/'
             df = pd.DataFrame({'MLAT': mlats_dct[mlat]['glats'], 'MLON': mlats_dct[mlat]['glons']})
@@ -265,6 +269,6 @@ def calc_mlat_rings(mlats,ut=datetime.datetime.now(), is_saved = 'False'):
 
             with open('output/graticules/'+filename+'.gpx', 'w') as f:
                 f.write(gpx.to_xml())
-            print('Writing ' + filename + " to gpx. ")
+            if is_verbose: print('Writing ' + filename + " to gpx. ")
 
     return mlats_dct
