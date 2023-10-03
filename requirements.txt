@@ -9,5 +9,4 @@ numpy
 gpxpy
 geopack
 lxml
-os
 plotly.graph_objects
