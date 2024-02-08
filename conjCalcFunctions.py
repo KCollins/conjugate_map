@@ -29,7 +29,7 @@ from geopack import t89
 import datetime
 ############################################################################################################################### 
 
-def findconj(lat, lon, ut = dt.datetime.now(), is_verbose = 0, method = 'aacgm'):
+def findconj(lat, lon, ut = dt.datetime.utcnow(), is_verbose = 0, method = 'aacgm'):
     
     """
     Calculate the geographic latitudes and longitudes of conjugate point for a given set of coordinates.
@@ -118,7 +118,7 @@ def findconj(lat, lon, ut = dt.datetime.now(), is_verbose = 0, method = 'aacgm')
 
 ############################################################################################################################### 
 
-def conjcalc(gdf, latname="GLAT", lonname="GLON", dtime = dt.datetime.now(), is_verbose = False, method = 'aacgm', mode = 'S2N', is_saved = False, directory='output/', name = 'stations'):
+def conjcalc(gdf, latname="GLAT", lonname="GLON", dtime = dt.datetime.utcnow(), is_verbose = False, method = 'aacgm', mode = 'S2N', is_saved = False, directory='output/', name = 'stations'):
     """
     Calculate the geographic latitudes and longitudes of conjugate points for all points in a dataframe. Calls findconj().
     
@@ -130,7 +130,7 @@ def conjcalc(gdf, latname="GLAT", lonname="GLON", dtime = dt.datetime.now(), is_
         is_verbose  : if set to True/1, prints debugging text
         method      : method used in conversion, passed to findconj(). Options are 'geopack', which uses IGRF + T89 to run field line traces, or 'aacgm'.
         mode        : 
-                                 'S2N'     : Return station coordinates for northern hemisphere, conjugate for southern. Map appears over the Arctic.
+                                 'S2N'     : Return station coordinates for northern hemisphere, conjugate for southern. Map appears over the Arctic. Default.
                                  'N2S'     : Return station coordinates for southern hemisphere, conjugate for northern. Map appears over the Antarctic.
                                  'flip'    : Return conjugate coordinates for all points regardless of hemisphere.
         is_saved    : Boolean dictating whether the final .csv is saved to the output directory.
@@ -213,14 +213,14 @@ def conjcalc(gdf, latname="GLAT", lonname="GLON", dtime = dt.datetime.now(), is_
 
 ############################################################################################################################### 
 
-def calc_mlat_rings(mlats,ut=datetime.datetime.now(), is_verbose = False, is_saved = 'False'):
+def calc_mlat_rings(mlats,ut=datetime.datetime.utcnow(), is_verbose = False, is_saved = 'False'):
     """
     Calculate the geographic latitudes and longitudes of a circle of points
     for a list of magnetic latitudes.
     
     Arguments:
         mlats       : list of magnetic latitudes
-        ut          : datetime.datetime used in AACGMv2 conversion; by default, ut=datetime.datetime.now()
+        ut          : datetime.datetime used in AACGMv2 conversion; by default, ut=datetime.datetime.utcnow()
         is_verbose  : if set to True/1, prints debugging text
         is_saved    : if is_saved == True, saves .gpx versions to local output directory
     
