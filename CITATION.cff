@@ -4,6 +4,9 @@ authors:
   - family-names: Collins
     given-names: Kristina
     orcid: https://orcid.org/0000-0002-3816-1948
+  - family-names: Burrell
+    given-names: Angeline
+    orcid: https://orcid.org/0000-0001-8875-9326
 title: "conjugate-map"
 version: 1
 doi: 10.5281/zenodo.10056623
