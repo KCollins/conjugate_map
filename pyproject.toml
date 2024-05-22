@@ -3,7 +3,7 @@ requires = ["oldest-supported-numpy", "setuptools >= 38.6", "pip >= 10"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "conjugate-map"
+name = "conjugate_map"
 version = "0.0.2"
 license = {file = "LICENSE"}
 description = 'Library for computing geomagnetic conjugate points.'
