@@ -4,7 +4,6 @@
 import numpy as np
 import pandas as pd
 import plotly.express as px
-import json
 import ogr
 import geopandas as gpd
 import aacgmv2
