@@ -13,9 +13,14 @@
     ],
     "creators": [
       {
-        "affiliation": "Case Western University",
-        "name": "Collins, Kristina",
+        "affiliation": "Space Science Institute",
+        "name": "Kristina Collins",
         "orcid": "0000-0002-3816-1948"
+      },
+      {
+	"orcid": "0000-0001-8875-9326", 
+        "affiliation": "Naval Research Laboratory", 
+        "name": "Angeline G. Burrell"
       },
     ]
 }
