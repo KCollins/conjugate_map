@@ -1,0 +1,59 @@
+[build-system]
+requires = ["oldest-supported-numpy", "setuptools >= 38.6", "pip >= 10"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "conjugate-map"
+version = "0.0.2"
+license = {file = "LICENSE"}
+description = 'Library for computing geomagnetic conjugate points.'
+maintainers = [
+    {name = "Kristina V. Collins", email = "kvcollins@spacescience.org"}
+]
+requires-python = ">=3.9"
+dependencies = [
+    "aacgmv2",
+    "geopack",
+    "geopandas",
+    "gpxpy",
+    "json",
+    "numpy",
+    "pandas",
+    "plotly",
+    "pandas",
+]
+readme = "README.md"
+keywords = [
+    "coordinates",
+    "ionosphere",
+    "atmosphere",
+    "thermosphere",
+    "magnetosphere",
+    "heliosphere",
+    "observations",
+    "models",
+    "analysis",
+    "conjugate",
+    "geomagnetic",
+    "instruments",
+    "mapping",
+    "visualization",
+    "plotting",
+    "Antarctica"
+]
+
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering :: Atmospheric Science",
+    "Topic :: Scientific/Engineering :: Physics",
+    "License :: OSI Approved :: MIT License",
+    "Natural Language :: English",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+]
+
+[project.urls]
+source = "https://github.com/KCollins/conjugate-map"
+download = "https://github.com/KCollins/conjugate-map/releases"
