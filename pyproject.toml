@@ -53,5 +53,5 @@ classifiers = [
 ]
 
 [project.urls]
-source = "https://github.com/KCollins/conjugate-map"
-download = "https://github.com/KCollins/conjugate-map/releases"
+source = "https://github.com/KCollins/conjugate_map"
+download = "https://github.com/KCollins/conjugate_map/releases"
