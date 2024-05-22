@@ -29,7 +29,7 @@ from geopack import t89
 import datetime
 ############################################################################################################################### 
 
-def findconj(lat, lon, ut = dt.datetime.utcnow(), is_verbose = 0, method = 'aacgm'):
+def findconj(lat, lon, ut = dt.datetime.utcnow(), is_verbose = 0, method = 'aacgm', limit = 60):
     
     """
     Calculate the geographic latitudes and longitudes of conjugate point for a given set of coordinates.
@@ -39,11 +39,20 @@ def findconj(lat, lon, ut = dt.datetime.utcnow(), is_verbose = 0, method = 'aacg
         lon         : geographic longitude of station whose conjugate point we're finding
         ut          : datetime used in conversion
         is_verbose  : if set to True/1, prints debugging text
-        method      : method used in conversion. Options are 'geopack', which uses IGRF + T89 to run field line traces, or 'aacgm'.
+        method      : method used in conversion. Options are 'auto', 'geopack', which uses IGRF + T89 to run field line traces, or 'aacgm'.
+        limit       : latitude limit, in degrees, used to switch between methods in auto mode. Default: 60.
+                        AACGM will converge above 35 degrees, but may be erroneous. See www.doi.org/10.1002/2014JA020264
         
     Returns:
         lat, lon    : latitude, longitude of conjugate points
     """
+    method = method.lower()  # Cast method as lowercase, in case someone uses capitals.
+    
+    if(method == 'auto'):
+        if(abs(lat) > limit): method = 'aacgm'
+        else:
+            method = 'geopack'
+        if(is_verbose): print("Setting method according to latitude limits: " + method)
     
     if(method == 'geopack'):
         ut = ut.timestamp()    
