@@ -1,31 +1,19 @@
 # functions for computing geomagnetic conjugate points.
 
 # Importing packages
+import datetime as dt
+import os
+
+import aacgmv2
+from geopack import geopack as gp 
+from geopack import t89
+import gpxpy
+import gpxpy.gpx
 import numpy as np
 import pandas as pd
 import plotly.express as px
-import ogr
-import geopandas as gpd
-import aacgmv2
-import datetime as dt
-import numpy as np
-import os
 import plotly.graph_objects as go
 
-import pandas as pd
-smag = __import__('supermag-api')          # SuperMAG python API
-logon = 'kd8oxt'                              # SuperMAG ID
-
-import gpxpy
-import gpxpy.gpx
-
-import geopandas
-
-# converting from geographic to GSM
-from geopack import geopack as gp 
-from geopack import t89
-
-import datetime
 ############################################################################################################################### 
 
 def findconj(lat, lon, ut = dt.datetime.utcnow(), is_verbose = 0, method = 'aacgm', limit = 60):
@@ -221,14 +209,14 @@ def conjcalc(gdf, latname="GLAT", lonname="GLON", dtime = dt.datetime.utcnow(), 
 
 ############################################################################################################################### 
 
-def calc_mlat_rings(mlats,ut=datetime.datetime.utcnow(), is_verbose = False, is_saved = 'False'):
+def calc_mlat_rings(mlats,ut=dt.datetime.utcnow(), is_verbose = False, is_saved = 'False'):
     """
     Calculate the geographic latitudes and longitudes of a circle of points
     for a list of magnetic latitudes.
     
     Arguments:
         mlats       : list of magnetic latitudes
-        ut          : datetime.datetime used in AACGMv2 conversion; by default, ut=datetime.datetime.utcnow()
+        ut          : dt.datetime used in AACGMv2 conversion; by default, ut=dt.datetime.utcnow()
         is_verbose  : if set to True/1, prints debugging text
         is_saved    : if is_saved == True, saves .gpx versions to local output directory
     
@@ -238,7 +226,7 @@ def calc_mlat_rings(mlats,ut=datetime.datetime.utcnow(), is_verbose = False, is_
                     points for each of the specified magnetic latitudes
     
     Example use: Saves .gpx magnetic graticules for 1 January 2020 every 5 degrees latitude.
-                 rings = calc_mlat_rings(list(range(-90, 90, 5)), ut = datetime.datetime(2020, 1, 1), is_saved = True)
+                 rings = calc_mlat_rings(list(range(-90, 90, 5)), ut = dt.datetime(2020, 1, 1), is_saved = True)
     """
     mlons = np.arange(0,360)
     mlats_dct   = {}
