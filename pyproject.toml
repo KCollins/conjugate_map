@@ -55,3 +55,6 @@ classifiers = [
 [project.urls]
 source = "https://github.com/KCollins/conjugate_map"
 download = "https://github.com/KCollins/conjugate_map/releases"
+
+[tool.setuptools]
+packages = ["conjugate_map"]
