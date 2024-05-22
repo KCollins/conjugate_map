@@ -16,11 +16,9 @@ dependencies = [
     "geopack",
     "geopandas",
     "gpxpy",
-    "json",
     "numpy",
     "pandas",
     "plotly",
-    "pandas",
 ]
 readme = "README.md"
 keywords = [
