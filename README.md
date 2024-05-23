@@ -3,7 +3,7 @@
 
 
 Files and scripts relating to geomagnetic conjugate map. 
-Run in Binder here: [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/KCollins/conjugate-map/HEAD?labpath=ConjugateMap.ipynb)
+Run in Binder here: [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/KCollins/conjugate_map/HEAD?labpath=notebooks%2FMWE.ipynb)
 
 There are two example notebooks available:
  - `MWE.ipynb`: Minimal working example demonstrating conjugate calculations.
