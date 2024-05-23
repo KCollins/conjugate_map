@@ -1,4 +1,4 @@
-# conjugate-map
+# conjugate_map
 Files and scripts relating to geomagnetic conjugate map. Please cite via Zenodo: [![DOI](https://zenodo.org/badge/651410906.svg)](https://zenodo.org/doi/10.5281/zenodo.10056623)
 
 Run in Binder here: [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/KCollins/conjugate-map/HEAD?labpath=ConjugateMap.ipynb)

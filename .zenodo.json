@@ -1,0 +1,26 @@
+{
+    "keywords": [
+	"magnetic field",
+	"coordinates",
+	"conjugate",
+	"conjugacy",
+	"ionosphere",
+	"atmosphere",
+	"thermosphere",
+	"magnetosphere",
+	"heliosphere",
+	"analysis"
+    ],
+    "creators": [
+      {
+        "affiliation": "Space Science Institute",
+        "name": "Kristina Collins",
+        "orcid": "0000-0002-3816-1948"
+      },
+      {
+	"orcid": "0000-0001-8875-9326", 
+        "affiliation": "Naval Research Laboratory", 
+        "name": "Angeline G. Burrell"
+      },
+    ]
+}
