@@ -16,7 +16,7 @@ import plotly.graph_objects as go
 
 ############################################################################################################################### 
 
-def findconj(lat, lon, ut = dt.datetime.utcnow(), is_verbose = False, method = 'aacgm', limit = 60):
+def findconj(lat, lon, ut = dt.datetime.utcnow(), is_verbose = False, method = 'auto', limit = 60):
     
     """
     Calculate the geographic latitudes and longitudes of conjugate point for a given set of coordinates.
@@ -27,6 +27,7 @@ def findconj(lat, lon, ut = dt.datetime.utcnow(), is_verbose = False, method = '
         ut          : datetime used in conversion
         is_verbose  : if set to True, prints debugging text
         method      : method used in conversion. Options are 'auto', 'geopack', which uses IGRF + T89 to run field line traces, or 'aacgm'.
+                        Default: 'auto'.
         limit       : latitude limit, in degrees, used to switch between methods in auto mode. Default: 60.
                         AACGM will converge above 35 degrees, but may be erroneous. See www.doi.org/10.1002/2014JA020264
         
