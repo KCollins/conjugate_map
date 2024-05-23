@@ -56,7 +56,7 @@ If you are proposing a new feature or a change in something that already exists:
 Development
 -----------
 
-To set up `conjugate-map` for local development:
+To set up `conjugate_map` for local development:
 
 1. [Fork pysat on GitHub](https://github.com/KCollins/conjugate-map/fork).
 
