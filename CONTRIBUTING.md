@@ -128,7 +128,7 @@ tests on your local system first.
 Project Style Guidelines
 ------------------------
 
-In general, `conjugate=map` follows PEP8 and numpydoc guidelines.  Pylint
+In general, `conjugate_map` follows PEP8.  Pylint
 checks for style.  However, there are certain additional style elements that
 have been adopted to ensure the project maintains a consistent coding style.
 These include:
