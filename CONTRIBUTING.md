@@ -42,7 +42,7 @@ Feature requests and feedback
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The best way to send feedback is to file an
-[issue](https://github.com/KCollins/conjugate-map/issues).
+[issue](https://github.com/KCollins/conjugate_map/issues).
 
 If you are proposing a new feature or a change in something that already exists:
 
