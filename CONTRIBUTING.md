@@ -29,7 +29,7 @@ easier the question will be to answer.
 Bug reports
 ^^^^^^^^^^^
 
-When [reporting a bug](https://github.com//KCollins/conjugate-map/issues) please
+When [reporting a bug](https://github.com//KCollins/conjugate_map/issues) please
 include:
 
 * Your operating system name and version
