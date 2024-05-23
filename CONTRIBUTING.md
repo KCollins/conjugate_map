@@ -58,7 +58,7 @@ Development
 
 To set up `conjugate_map` for local development:
 
-1. [Fork pysat on GitHub](https://github.com/KCollins/conjugate-map/fork).
+1. [Fork conjugate_map on GitHub](https://github.com/KCollins/conjugate_map/fork).
 
 2. Clone your fork locally:
 
