@@ -115,7 +115,7 @@ For merging, you should:
 
 1. Include an example for use
 2. Add a note to ``CHANGELOG.md`` about the changes
-3. Update the author list in ``zenodo.json``, if applicable
+3. Update the author list in ``zenodo.json`` and ``CITATION.cff``, if applicable
 4. Ensure that all checks passed (current checks include GitHub Actions)
 
 If you don't have all the necessary Python versions available locally or have
