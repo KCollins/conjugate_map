@@ -9,7 +9,7 @@ Short version
 -------------
 
 * Submit bug reports, feature requests, and questions at
-  [GitHub](https://github.com//KCollins/conjugate-map/issues)
+  [GitHub](https://github.com//KCollins/conjugate_map/issues)
 
 * Make pull requests to the ``develop`` branch
 
