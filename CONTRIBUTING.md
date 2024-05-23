@@ -9,7 +9,7 @@ Short version
 -------------
 
 * Submit bug reports, feature requests, and questions at
-  [GitHub](https://github.com//KCollins/conjugate-map/issues)
+  [GitHub](https://github.com//KCollins/conjugate_map/issues)
 
 * Make pull requests to the ``develop`` branch
 
@@ -29,7 +29,7 @@ easier the question will be to answer.
 Bug reports
 ^^^^^^^^^^^
 
-When [reporting a bug](https://github.com//KCollins/conjugate-map/issues) please
+When [reporting a bug](https://github.com//KCollins/conjugate_map/issues) please
 include:
 
 * Your operating system name and version
@@ -42,7 +42,7 @@ Feature requests and feedback
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The best way to send feedback is to file an
-[issue](https://github.com/KCollins/conjugate-map/issues).
+[issue](https://github.com/KCollins/conjugate_map/issues).
 
 If you are proposing a new feature or a change in something that already exists:
 
@@ -56,14 +56,14 @@ If you are proposing a new feature or a change in something that already exists:
 Development
 -----------
 
-To set up `conjugate-map` for local development:
+To set up `conjugate_map` for local development:
 
-1. [Fork pysat on GitHub](https://github.com/KCollins/conjugate-map/fork).
+1. [Fork conjugate_map on GitHub](https://github.com/KCollins/conjugate_map/fork).
 
 2. Clone your fork locally:
 
   ```
-    git clone git@github.com:your_name_here/conjugate-map.git
+    git clone git@github.com:your_name_here/conjugate_map.git
   ```
 
 3. Create a branch for local development:
@@ -91,11 +91,7 @@ To set up `conjugate-map` for local development:
 7. Commit your changes:
    ```
    git add .
-   git commit -m "AAA: Brief description of your changes"
-   ```
-   Where AAA is a standard shorthand for the type of change (e.g., BUG or DOC).
-   `conjugate-map` recommends the [numpy development workflow style](https://numpy.org/doc/stable/dev/development_workflow.html),
-   see the discussion there for a full list of this shorthand notation.  
+   git commit -m "Brief description of your changes"
 
 9. Once you are happy with the local changes, push to GitHub:
    ```
@@ -119,7 +115,7 @@ For merging, you should:
 
 1. Include an example for use
 2. Add a note to ``CHANGELOG.md`` about the changes
-3. Update the author list in ``zenodo.json``, if applicable
+3. Update the author list in ``zenodo.json`` and ``CITATION.cff``, if applicable
 4. Ensure that all checks passed (current checks include GitHub Actions)
 
 If you don't have all the necessary Python versions available locally or have
@@ -132,7 +128,7 @@ tests on your local system first.
 Project Style Guidelines
 ------------------------
 
-In general, `conjugate=map` follows PEP8 and numpydoc guidelines.  Pylint
+In general, `conjugate_map` follows PEP8.  Pylint
 checks for style.  However, there are certain additional style elements that
 have been adopted to ensure the project maintains a consistent coding style.
 These include:
