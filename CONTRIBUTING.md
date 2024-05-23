@@ -63,7 +63,7 @@ To set up `conjugate_map` for local development:
 2. Clone your fork locally:
 
   ```
-    git clone git@github.com:your_name_here/conjugate-map.git
+    git clone git@github.com:your_name_here/conjugate_map.git
   ```
 
 3. Create a branch for local development:
