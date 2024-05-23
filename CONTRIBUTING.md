@@ -91,11 +91,7 @@ To set up `conjugate_map` for local development:
 7. Commit your changes:
    ```
    git add .
-   git commit -m "AAA: Brief description of your changes"
-   ```
-   Where AAA is a standard shorthand for the type of change (e.g., BUG or DOC).
-   `conjugate-map` recommends the [numpy development workflow style](https://numpy.org/doc/stable/dev/development_workflow.html),
-   see the discussion there for a full list of this shorthand notation.  
+   git commit -m "Brief description of your changes"
 
 9. Once you are happy with the local changes, push to GitHub:
    ```
