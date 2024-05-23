@@ -7,6 +7,9 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 --------------------
 * Added Continuous Integration tests for style
 * Added community documentation
+* Refactored code base to enable installation
+* Created directory for notebooks
+* Renamed repository and package from conjugate-maps to conjugate_maps
 
 [0.1.0] - 2023-10-30
 --------------------
