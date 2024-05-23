@@ -9,3 +9,4 @@ numpy
 gpxpy
 geopack
 lxml
+conjugate_map
