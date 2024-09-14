@@ -15,9 +15,11 @@ import plotly.express as px
 import plotly.graph_objects as go
 
 
+
 ###############################################################################
 def findconj(lat, lon, ut=dt.datetime.utcnow(), 
              is_verbose=False, method='aacgm', limit=60):
+
     
     """
     Calculate the geographic latitudes and longitudes of conjugate point for a 
@@ -35,6 +37,7 @@ def findconj(lat, lon, ut=dt.datetime.utcnow(),
                         methods in auto mode. Default: 60.
                         AACGM will converge above 35 degrees, but may be 
                         erroneous. See www.doi.org/10.1002/2014JA020264
+
         
     Returns:
         lat, lon    : latitude, longitude of conjugate points
