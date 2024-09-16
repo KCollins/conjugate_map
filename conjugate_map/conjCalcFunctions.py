@@ -257,7 +257,7 @@ def conjcalc(gdf, latname="GLAT", lonname="GLON", dtime=dt.datetime.now(tz=dt.ti
 ###############################################################################
 
 
-def calc_mlat_rings(mlats, ut=dt.datetime.utcnow(), is_verbose=False,
+def calc_mlat_rings(mlats, ut=dt.datetime.now(tz=dt.timezone.utc), is_verbose=False,
                     is_saved=False):
     """
     Calculate the geographic latitudes and longitudes of a circle of points
