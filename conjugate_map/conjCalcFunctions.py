@@ -49,8 +49,8 @@ def findconj(lat, lon, ut=dt.datetime.now(tz=dt.timezone.utc),
 
     if method == 'geopack':
         ut = ut.timestamp()
-        # pylint: disable-next=global-statement
-        ps = gp.recalc(ut)  # Lint doesn't like it, but geopack needs this line
+        ps = gp.recalc(ut)  # pylint: disable=unused-variable 
+        # Lint doesn't like it, but geopack needs this command.
         if is_verbose:
             print('............................................'
                   'Calculating conjugate point for ' + str(lat) + ', '
