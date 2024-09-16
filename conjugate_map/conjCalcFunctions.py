@@ -266,7 +266,7 @@ def calc_mlat_rings(mlats, ut=dt.datetime.now(tz=dt.timezone.utc), is_verbose=Fa
     Arguments:
         mlats       : list of magnetic latitudes
         ut          : dt.datetime used in AACGMv2 conversion;
-                        by default, ut=dt.datetime.utcnow()
+                        by default, ut=dt.datetime.now(tz=dt.timezone.utc)
         is_verbose  : if set to True/1, prints debugging text
         is_saved    : if is_saved == True, saves .gpx versions
                         to local output directory
