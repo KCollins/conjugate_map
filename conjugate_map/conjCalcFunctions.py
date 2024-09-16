@@ -13,7 +13,7 @@ import pandas as pd
 
 
 ###############################################################################
-def findconj(lat, lon, ut=dt.datetime.utcnow(),
+def findconj(lat, lon, ut=dt.datetime.now(tz=dt.timezone.utc),
              is_verbose=False, method='aacgm', limit=60):
 
     """
