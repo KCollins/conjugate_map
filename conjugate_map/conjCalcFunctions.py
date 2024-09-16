@@ -135,7 +135,7 @@ def findconj(lat, lon, ut=dt.datetime.now(tz=dt.timezone.utc),
 
 ###############################################################################
 
-def conjcalc(gdf, latname="GLAT", lonname="GLON", dtime=dt.datetime.utcnow(),
+def conjcalc(gdf, latname="GLAT", lonname="GLON", dtime=dt.datetime.now(tz=dt.timezone.utc),
              is_verbose=False, method='aacgm', mode='S2N', is_saved=False,
              directory='output/', name='stations'):
     """
