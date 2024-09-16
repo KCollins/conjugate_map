@@ -79,14 +79,14 @@ def findconj(lat, lon, ut=dt.datetime.utcnow(),
         # Now let's try running the field line trace: help(gp.trace) for doc.
         rlim, r0 = [1000, .9]
 
-        foo = gp.trace(xgsm, ygsm, zgsm, dir=-1, rlim=rlim, r0=r0, parmod=2, 
-                       exname='t89', inname='igrf')
+        fieldline = gp.trace(xgsm, ygsm, zgsm, dir=-1, rlim=rlim, r0=r0, parmod=2,
+                             exname='t89', inname='igrf')
 
-        x1gsm, y1gsm, z1gsm = foo[0:3]
+        x1gsm, y1gsm, z1gsm = fieldline[0:3]
         if is_verbose:
             print('Traced GSM Coordinates, Cartesian: ')
             print(x1gsm, y1gsm, z1gsm)
-            print(str(len(foo[4])) + ' points in traced vector.')
+            print(str(len(fieldline[4])) + ' points in traced vector.')
             print('Sum of squares (should be 1):')
             print(x1gsm**2 + y1gsm**2 + z1gsm**2)
 
@@ -116,12 +116,12 @@ def findconj(lat, lon, ut=dt.datetime.utcnow(),
         return lat, lon
 
     elif method == "aacgm":
-        if is_verbose: 
+        if is_verbose:
             print('............................................'
-                  'Calculating conjugate point for ' + str(lat) + ', ' 
+                  'Calculating conjugate point for ' + str(lat) + ', '
                   + str(lon) + ' at ' + str(ut) + ' with AACGMV2: ')
         mlat, mlon, _ = aacgmv2.convert_latlon(lat, lon, 0, ut, 'G2A')
-        if is_verbose: 
+        if is_verbose:
             print('Magnetic lat/lon: ' + str([mlat, mlon]))
         glat_con, glon_con, _ = aacgmv2.convert_latlon(
             -1.*mlat, mlon, 0, ut, 'A2G')
@@ -182,10 +182,10 @@ def conjcalc(gdf, latname="GLAT", lonname="GLON", dtime=dt.datetime.utcnow(),
         try:
             lat = row[latname]
             lon = row[lonname]
-            if is_verbose: 
+            if is_verbose:
                 print('Checking hemisphere.')
             if type(lon) == str:
-                if is_verbose: 
+                if is_verbose:
                     print('Longitude encoded as string. Fixing...')
                 try:
                     lon = lon.replace('−', '-')
@@ -194,12 +194,12 @@ def conjcalc(gdf, latname="GLAT", lonname="GLON", dtime=dt.datetime.utcnow(),
                     print(e)
                     continue
             if type(lat) == str:
-                if is_verbose: 
+                if is_verbose:
                     print('Latitude encoded as string. Fixing...')
                 try:
                     lat = lat.replace('−', '-')
                     lat = float(lat)
-                    if is_verbose: 
+                    if is_verbose:
                         print('Now floats: ' + str([lat, lon]))
                 except Exception as e:
                     print(e)
@@ -220,7 +220,7 @@ def conjcalc(gdf, latname="GLAT", lonname="GLON", dtime=dt.datetime.utcnow(),
 
             # Figure out what coordinates we ultimately want to plot:
             if lat > 0:
-                if is_verbose: 
+                if is_verbose:
                     print('Setting Northern hemisphere for GLAT of ' + str(lat)
                           + ' on station ' + index)
                 gdf.loc[index, 'Hemisphere'] = 'N'
@@ -247,7 +247,7 @@ def conjcalc(gdf, latname="GLAT", lonname="GLON", dtime=dt.datetime.utcnow(),
             print('Ran into a problem with ' + str(index))
             print(e)
             continue
-        
+
         if is_saved:
             filename = name + '_' + mode + '-' + method + '-' + str(dtime)
             gdf.to_csv(directory + filename + '.csv')  # save as .csv
