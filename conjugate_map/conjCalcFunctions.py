@@ -1,4 +1,4 @@
-# functions for computing geomagnetic conjugate points.
+"""Functions for computing geomagnetic conjugate points."""
 
 # Importing packages
 import aacgmv2
@@ -49,7 +49,8 @@ def findconj(lat, lon, ut=dt.datetime.now(tz=dt.timezone.utc),
 
     if method == 'geopack':
         ut = ut.timestamp()
-        ps = gp.recalc(ut)  # Lint doesn't like it, but geopack needs this line.
+        # pylint: disable-next=global-statement
+        ps = gp.recalc(ut)  # Lint doesn't like it, but geopack needs this line
         if is_verbose:
             print('............................................'
                   'Calculating conjugate point for ' + str(lat) + ', '
@@ -135,9 +136,10 @@ def findconj(lat, lon, ut=dt.datetime.now(tz=dt.timezone.utc),
 
 ###############################################################################
 
-def conjcalc(gdf, latname="GLAT", lonname="GLON", dtime=dt.datetime.now(tz=dt.timezone.utc),
-             is_verbose=False, method='aacgm', mode='S2N', is_saved=False,
-             directory='output/', name='stations'):
+def conjcalc(gdf, latname="GLAT", lonname="GLON",
+             dtime=dt.datetime.now(tz=dt.timezone.utc),
+             is_verbose=False, method='aacgm', mode='S2N',
+             is_saved=False, directory='output/', name='stations'):
     """
     Calculate the geographic latitudes and longitudes of conjugate points for
     all points in a dataframe. Calls findconj().
@@ -250,7 +252,7 @@ def conjcalc(gdf, latname="GLAT", lonname="GLON", dtime=dt.datetime.now(tz=dt.ti
 
         if is_saved:
             filename = name + '_' + mode + '-' + method + '-' + str(dtime)
-            gdf.to_csv(os.path.join(directory, ''.join([filename, '.csv'])))  # save as .csv
+            gdf.to_csv(os.path.join(directory, ''.join([filename, '.csv'])))
 
     return gdf
 
