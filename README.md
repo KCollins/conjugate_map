@@ -15,3 +15,10 @@ The following functions are imported from `conjCalcFunctions.py`:
  - `conjugate_map.calc_mlat_rings()` : function to calculate magnetic graticules for a given latitude and datetime.
  
  You can read the documentation for each function by running, e.g., `help(calc_mlat_rings)`.
+
+## Installation
+To install from pypi: 
+`pip install conjugate-map`
+
+To install from source: 
+Clone git repo and run `python -m pip install .` from top level of directory.
