@@ -10,8 +10,15 @@ There are two example notebooks available:
  - `ConjugateMap.ipynb`: More in-depth examples using COMNAP, Madrigal and other databases to produce animated maps with plotly express.
 
 The following functions are imported from `conjCalcFunctions.py`:
- - `findconj()` : function to compute conjugate points for a given location at a given time and date. 
- - `conjcalc()` : function to take in a dataframe and add columns for all stages of calculating conjugate points.
- - `calc_mlat_rings()` : function to calculate magnetic graticules for a given latitude and datetime.
+ - `conjugate_map.findconj()` : function to compute conjugate points for a given location at a given time and date. 
+ - `conjugate_map.conjcalc()` : function to take in a dataframe and add columns for all stages of calculating conjugate points.
+ - `conjugate_map.calc_mlat_rings()` : function to calculate magnetic graticules for a given latitude and datetime.
  
  You can read the documentation for each function by running, e.g., `help(calc_mlat_rings)`.
+
+## Installation
+To install from pypi: 
+`pip install conjugate-map`
+
+To install from source: 
+Clone git repo and run `python -m pip install .` from top level of directory.
