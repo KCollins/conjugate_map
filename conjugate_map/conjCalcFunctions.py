@@ -250,7 +250,7 @@ def conjcalc(gdf, latname="GLAT", lonname="GLON", dtime=dt.datetime.now(tz=dt.ti
 
         if is_saved:
             filename = name + '_' + mode + '-' + method + '-' + str(dtime)
-            gdf.to_csv(directory + filename + '.csv')  # save as .csv
+            gdf.to_csv(os.path.join(directory, ''.join([filename, '.csv'])))  # save as .csv
 
     return gdf
 
