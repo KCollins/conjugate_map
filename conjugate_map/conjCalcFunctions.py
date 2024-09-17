@@ -49,7 +49,7 @@ def findconj(lat, lon, ut=dt.datetime.now(tz=dt.timezone.utc),
 
     if method == 'geopack':
         ut = ut.timestamp()
-        ps = gp.recalc(ut)  # pylint: disable=unused-variable 
+        ps = gp.recalc(ut)  # pylint: disable=unused-variable # noqa: F841
         # Lint doesn't like it, but geopack needs this command.
         if is_verbose:
             print('............................................'
