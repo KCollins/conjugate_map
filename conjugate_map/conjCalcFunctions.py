@@ -1,14 +1,15 @@
 """Functions for computing geomagnetic conjugate points."""
 
 # Importing packages
-import aacgmv2
 import datetime as dt
+import os
+
+import aacgmv2
 from geopack import geopack as gp
 from geopack import t89
 import gpxpy
 import gpxpy.gpx
 import numpy as np
-import os
 import pandas as pd
 
 
@@ -186,7 +187,7 @@ def conjcalc(gdf, latname="GLAT", lonname="GLON",
             lon = row[lonname]
             if is_verbose:
                 print('Checking hemisphere.')
-            if type(lon) == str:
+            if isinstance(lon, str):
                 if is_verbose:
                     print('Longitude encoded as string. Fixing...')
                 try:
@@ -195,7 +196,7 @@ def conjcalc(gdf, latname="GLAT", lonname="GLON",
                 except Exception as e:
                     print(e)
                     continue
-            if type(lat) == str:
+            if isinstance(lat, str):
                 if is_verbose:
                     print('Latitude encoded as string. Fixing...')
                 try:
