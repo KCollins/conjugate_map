@@ -1,0 +1,7 @@
+aacgmv2
+datetime
+geopack
+gpxpy
+numpy
+os
+pandas
