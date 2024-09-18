@@ -6,7 +6,6 @@ import os
 
 import aacgmv2
 from geopack import geopack as gp
-from geopack import t89
 import gpxpy
 import gpxpy.gpx
 import numpy as np
@@ -81,8 +80,8 @@ def findconj(lat, lon, ut=dt.datetime.now(tz=dt.timezone.utc),
         # Now let's try running the field line trace: help(gp.trace) for doc.
         rlim, r0 = [1000, .9]
 
-        fieldline = gp.trace(xgsm, ygsm, zgsm, dir=-1, rlim=rlim, r0=r0, parmod=2,
-                             exname='t89', inname='igrf')
+        fieldline = gp.trace(xgsm, ygsm, zgsm, dir=-1, rlim=rlim, r0=r0,
+                             parmod=2, exname='t89', inname='igrf')
 
         x1gsm, y1gsm, z1gsm = fieldline[0:3]
         if is_verbose:
@@ -260,8 +259,8 @@ def conjcalc(gdf, latname="GLAT", lonname="GLON",
 ###############################################################################
 
 
-def calc_mlat_rings(mlats, ut=dt.datetime.now(tz=dt.timezone.utc), is_verbose=False,
-                    is_saved=False):
+def calc_mlat_rings(mlats, ut=dt.datetime.now(tz=dt.timezone.utc),
+                    is_verbose=False, is_saved=False):
     """
     Calculate the geographic latitudes and longitudes of a circle of points
     for a list of magnetic latitudes.
