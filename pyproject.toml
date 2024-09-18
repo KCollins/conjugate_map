@@ -57,3 +57,9 @@ download = "https://github.com/KCollins/conjugate_map/releases"
 
 [tool.setuptools]
 packages = ["conjugate_map"]
+
+[tool.poetry.scripts]
+my_script = "python conj_calc.py"
+
+[tool.poetry.scripts.my_script.options]
+pylint = ["--disable=R0912,R0913,R0914,R0915"]
