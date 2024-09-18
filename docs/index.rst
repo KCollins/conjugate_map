@@ -3,7 +3,7 @@
 conjugate_map
 ===================================
 
-**Lumache** (/lu'make/) is a Python library for computing geomagnetic conjugate points
+**conjugate_map** is a Python library for computing geomagnetic conjugate points. 
 
 Check out the :doc:`usage` section for further information, including
 how to :ref:`installation` the project.

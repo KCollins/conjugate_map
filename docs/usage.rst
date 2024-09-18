@@ -31,3 +31,7 @@ You can read the documentation for each function by running, e.g.,
 ``help(calc_mlat_rings)``.
 
 
+How to Cite
+----------------
+Collins, K., & Burrell, A. (2023). conjugate-map (Version 1) [Computer
+software]. https://doi.org/10.5281/zenodo.10056623
