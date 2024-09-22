@@ -1,5 +1,5 @@
 # conjugate_map
-[![PyPI version](https://badge.fury.io/py/conjugate-map.svg)](https://badge.fury.io/py/conjugate-map) [![DOI](https://zenodo.org/badge/651410906.svg)](https://zenodo.org/doi/10.5281/zenodo.10056623)
+[![PyPI version](https://badge.fury.io/py/conjugate-map.svg)](https://badge.fury.io/py/conjugate-map) [![DOI](https://zenodo.org/badge/651410906.svg)](https://zenodo.org/doi/10.5281/zenodo.10056623) [![Documentation Status](https://readthedocs.org/projects/conjugate-map/badge/?version=latest)](https://conjugate-map.readthedocs.io/en/latest/?badge=latest)
 
 
 Files and scripts relating to geomagnetic conjugate map. 
