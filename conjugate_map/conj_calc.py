@@ -1,14 +1,14 @@
 """Functions for computing geomagnetic conjugate points."""
 
 # Importing packages
-import aacgmv2
 import datetime as dt
+import os
+
+import aacgmv2
 from geopack import geopack as gp
-from geopack import t89
 import gpxpy
 import gpxpy.gpx
 import numpy as np
-import os
 import pandas as pd
 
 
@@ -49,7 +49,7 @@ def findconj(lat, lon, ut=dt.datetime.now(tz=dt.timezone.utc),
 
     if method == 'geopack':
         ut = ut.timestamp()
-        ps = gp.recalc(ut)  # pylint: disable=unused-variable 
+        ps = gp.recalc(ut)  # pylint: disable=unused-variable # noqa: F841
         # Lint doesn't like it, but geopack needs this command.
         if is_verbose:
             print('............................................'
@@ -80,8 +80,8 @@ def findconj(lat, lon, ut=dt.datetime.now(tz=dt.timezone.utc),
         # Now let's try running the field line trace: help(gp.trace) for doc.
         rlim, r0 = [1000, .9]
 
-        fieldline = gp.trace(xgsm, ygsm, zgsm, dir=-1, rlim=rlim, r0=r0, parmod=2,
-                             exname='t89', inname='igrf')
+        fieldline = gp.trace(xgsm, ygsm, zgsm, dir=-1, rlim=rlim, r0=r0,
+                             parmod=2, exname='t89', inname='igrf')
 
         x1gsm, y1gsm, z1gsm = fieldline[0:3]
         if is_verbose:
@@ -186,7 +186,7 @@ def conjcalc(gdf, latname="GLAT", lonname="GLON",
             lon = row[lonname]
             if is_verbose:
                 print('Checking hemisphere.')
-            if type(lon) == str:
+            if isinstance(lon, str):
                 if is_verbose:
                     print('Longitude encoded as string. Fixing...')
                 try:
@@ -195,7 +195,7 @@ def conjcalc(gdf, latname="GLAT", lonname="GLON",
                 except Exception as e:
                     print(e)
                     continue
-            if type(lat) == str:
+            if isinstance(lat, str):
                 if is_verbose:
                     print('Latitude encoded as string. Fixing...')
                 try:
@@ -259,8 +259,8 @@ def conjcalc(gdf, latname="GLAT", lonname="GLON",
 ###############################################################################
 
 
-def calc_mlat_rings(mlats, ut=dt.datetime.now(tz=dt.timezone.utc), is_verbose=False,
-                    is_saved=False):
+def calc_mlat_rings(mlats, ut=dt.datetime.now(tz=dt.timezone.utc),
+                    is_verbose=False, is_saved=False):
     """
     Calculate the geographic latitudes and longitudes of a circle of points
     for a list of magnetic latitudes.
