@@ -18,8 +18,8 @@
 # -- Project information -----------------------------------------------------
 
 project = "conjugate_map"
-copyright = "2022, Read the Docs core team"
-author = "Read the Docs core team"
+copyright = "2024"
+author = "Kristina Collins, Angeline Burrell"
 
 
 # -- General configuration ---------------------------------------------------

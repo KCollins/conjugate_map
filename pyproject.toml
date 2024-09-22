@@ -57,3 +57,7 @@ download = "https://github.com/KCollins/conjugate_map/releases"
 
 [tool.setuptools]
 packages = ["conjugate_map"]
+
+[tool.pylint.'MESSAGES CONTROL']
+max-line-length = 120
+disable = "too-many-arguments,not-callable,R0915"
