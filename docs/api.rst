@@ -1,7 +1,7 @@
 API
-===
+=============
 
-.. autosummary::
-   :toctree: generated
+.. toctree::
+   :maxdepth: 4
 
-   lumache
+   conjugate_map
