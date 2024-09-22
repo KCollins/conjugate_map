@@ -116,7 +116,7 @@ def findconj(lat, lon, ut=dt.datetime.now(tz=dt.timezone.utc),
             print(lat, lon)
         return lat, lon
 
-    elif method == "aacgm":
+    if method == "aacgm":
         if is_verbose:
             print('............................................'
                   'Calculating conjugate point for ' + str(lat) + ', '
@@ -130,8 +130,8 @@ def findconj(lat, lon, ut=dt.datetime.now(tz=dt.timezone.utc),
             print('Conjugate geographic lat/lon: ' + str([glat_con, glon_con]))
         return glat_con, glon_con
 
-    else:
-        print('Method is not listed.')
+    print('Method is not listed.')
+    return 0, 0
 
 
 ###############################################################################
@@ -226,7 +226,7 @@ def conjcalc(gdf, latname="GLAT", lonname="GLON",
                     print('Setting Northern hemisphere for GLAT of ' + str(lat)
                           + ' on station ' + index)
                 gdf.loc[index, 'Hemisphere'] = 'N'
-                if (mode == 'N2S' or mode == 'flip'):
+                if mode in ('N2S', 'flip'):
                     gdf.loc[index, 'PLAT'] = clat
                     gdf.loc[index, 'PLON'] = clon
                 else:
@@ -238,7 +238,7 @@ def conjcalc(gdf, latname="GLAT", lonname="GLON",
                     print('Setting Southern hemisphere for GLAT of ' + str(lat)
                           + ' on station ' + index)
                 gdf.loc[index, 'Hemisphere'] = 'S'
-                if (mode == 'S2N' or mode == 'flip'):
+                if mode in ('S2N', 'flip'):
                     gdf.loc[index, 'PLAT'] = clat
                     gdf.loc[index, 'PLON'] = clon
                 else:
@@ -322,7 +322,8 @@ def calc_mlat_rings(mlats, ut=dt.datetime.now(tz=dt.timezone.utc),
 
             # print(gpx.to_xml())
 
-            with open('output/graticules/'+filename+'.gpx', 'w') as f:
+            with open('output/graticules/'+filename+'.gpx', 'w',
+                      encoding="utf-8") as f:
                 f.write(gpx.to_xml())
             if is_verbose:
                 print('Writing ' + filename + " to gpx. ")
