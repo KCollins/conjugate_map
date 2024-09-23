@@ -1,7 +1,15 @@
+.. _api:
+
 API
-=============
+===
 
-.. toctree::
-   :maxdepth: 4
+.. _api_func:
 
-   conjugate_map
+Main Functions
+--------------
+
+.. autofunction:: conjugate_map.calc_mlat_rings
+
+.. autofunction:: conjugate_map.conjcalc
+
+.. autofunction:: conjugate_map.conjcalc
