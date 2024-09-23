@@ -12,7 +12,7 @@ To install from source: Clone git repo and run
 
 
 Example Notebooks
-----------------
+-----------------
 
 There are two example notebooks available: - ``MWE.ipynb``: Minimal
 working example demonstrating conjugate calculations. -
@@ -32,6 +32,6 @@ You can read the documentation for each function by running, e.g.,
 
 
 How to Cite
-----------------
+-----------
 Collins, K., & Burrell, A. (2023). conjugate-map (Version 1) [Computer
 software]. https://doi.org/10.5281/zenodo.10056623
