@@ -60,4 +60,4 @@ packages = ["conjugate_map"]
 
 [tool.pylint.'MESSAGES CONTROL']
 max-line-length = 120
-disable = "R0912,R0913,R0914,R0915,R0917"
+disable = "R0912,R0913,R0914,R0915,R0917,C0103,W0622"

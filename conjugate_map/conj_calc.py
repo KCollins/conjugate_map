@@ -181,74 +181,61 @@ def conjcalc(gdf, latname="GLAT", lonname="GLON",
 
     # Iterate over the DataFrame
     for index, row in gdf.iterrows():
-        try:
-            lat = row[latname]
-            lon = row[lonname]
+        lat = row[latname]
+        lon = row[lonname]
+        if is_verbose:
+            print('Checking hemisphere.')
+        if isinstance(lon, str):
             if is_verbose:
-                print('Checking hemisphere.')
-            if isinstance(lon, str):
-                if is_verbose:
-                    print('Longitude encoded as string. Fixing...')
-                try:
-                    lon = lon.replace('−', '-')
-                    lon = float(lon)
-                except Exception as e:
-                    print(e)
-                    continue
-            if isinstance(lat, str):
-                if is_verbose:
-                    print('Latitude encoded as string. Fixing...')
-                try:
-                    lat = lat.replace('−', '-')
-                    lat = float(lat)
-                    if is_verbose:
-                        print('Now floats: ' + str([lat, lon]))
-                except Exception as e:
-                    print(e)
-                    continue
-            # print(type(lon))
-            if lon > 180:
-                lon = lon-360
+                print('Longitude encoded as string. Fixing...')
             try:
-                [clat, clon] = findconj(lat, lon, dtime, is_verbose=is_verbose,
-                                        method=method)
-                if is_verbose:
-                    print('Conjugate latitude and longitude: ')
-                    print([clat, clon])
-                gdf.loc[index, 'PLAT'], gdf.loc[index, 'PLON'] = [clat, clon]
-            except Exception as e:
-                print('Ran into a problem with ' + index)
+                lon = lon.replace('−', '-')
+                lon = float(lon)
+            except ValueError as e:
                 print(e)
+                continue
+        if isinstance(lat, str):
+            if is_verbose:
+                print('Latitude encoded as string. Fixing...')
+            lat = lat.replace('−', '-')
+            lat = float(lat)
+            if is_verbose:
+                print('Now floats: ' + str([lat, lon]))
 
-            # Figure out what coordinates we ultimately want to plot:
-            if lat > 0:
-                if is_verbose:
-                    print('Setting Northern hemisphere for GLAT of ' + str(lat)
-                          + ' on station ' + index)
-                gdf.loc[index, 'Hemisphere'] = 'N'
-                if mode in ('N2S', 'flip'):
-                    gdf.loc[index, 'PLAT'] = clat
-                    gdf.loc[index, 'PLON'] = clon
-                else:
-                    gdf.loc[index, 'PLAT'] = lat
-                    gdf.loc[index, 'PLON'] = lon
+        if lon > 180:
+            lon = lon-360
 
+        [clat, clon] = findconj(lat, lon, dtime, is_verbose=is_verbose,
+                                method=method)
+        if is_verbose:
+            print('Conjugate latitude and longitude: ')
+            print([clat, clon])
+        gdf.loc[index, 'PLAT'], gdf.loc[index, 'PLON'] = [clat, clon]
+
+        # Figure out what coordinates we ultimately want to plot:
+        if lat > 0:
+            if is_verbose:
+                print('Setting Northern hemisphere for GLAT of ' + str(lat)
+                      + ' on station ' + index)
+            gdf.loc[index, 'Hemisphere'] = 'N'
+            if mode in ('N2S', 'flip'):
+                gdf.loc[index, 'PLAT'] = clat
+                gdf.loc[index, 'PLON'] = clon
             else:
-                if is_verbose:
-                    print('Setting Southern hemisphere for GLAT of ' + str(lat)
-                          + ' on station ' + index)
-                gdf.loc[index, 'Hemisphere'] = 'S'
-                if mode in ('S2N', 'flip'):
-                    gdf.loc[index, 'PLAT'] = clat
-                    gdf.loc[index, 'PLON'] = clon
-                else:
-                    gdf.loc[index, 'PLAT'] = lat
-                    gdf.loc[index, 'PLON'] = lon
+                gdf.loc[index, 'PLAT'] = lat
+                gdf.loc[index, 'PLON'] = lon
 
-        except Exception as e:
-            print('Ran into a problem with ' + str(index))
-            print(e)
-            continue
+        else:
+            if is_verbose:
+                print('Setting Southern hemisphere for GLAT of ' + str(lat)
+                      + ' on station ' + index)
+            gdf.loc[index, 'Hemisphere'] = 'S'
+            if mode in ('S2N', 'flip'):
+                gdf.loc[index, 'PLAT'] = clat
+                gdf.loc[index, 'PLON'] = clon
+            else:
+                gdf.loc[index, 'PLAT'] = lat
+                gdf.loc[index, 'PLON'] = lon
 
         if is_saved:
             filename = name + '_' + mode + '-' + method + '-' + str(dtime)
