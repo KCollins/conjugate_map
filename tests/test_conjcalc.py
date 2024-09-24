@@ -1,35 +1,17 @@
+"""Integration and unit test suite for conj_calc methods."""
 #!/usr/bin/env python
 # Full license can be found in License.md
 # Full author list can be found in .zenodo.json file
 # DOI:10.5281/zenodo.10056623
 # ----------------------------------------------------------------------------
-"""Integration and unit test suite for conj_calc methods."""
 
-# import pytest
-
-import conjugate_map.conj_calc as conj
 import datetime as dt
-
-
-# class TestConjMethods(object):
-#     """Test class for conj_calc methods."""
-
-#     def setup_method(self):
-#         """Create a clean testing setup."""
-#         self.out = None
-#         return
-
-#     def teardown_method(self):
-#         """Clean up previous testing setup."""
-#         del self.out
-#         return
-
 import unittest
 
-# import conjugate_map as conj
+import conjugate_map.conj_calc as conj
 
 class TestFindConjugate(unittest.TestCase):
-
+    """Integration and unit test suite for conj_calc methods."""
     def test_geopack_method_north(self):
         """
         Test `findconj` with 'geopack' method for a northern hemisphere point.
