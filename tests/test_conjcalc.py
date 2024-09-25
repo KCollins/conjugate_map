@@ -99,7 +99,3 @@ class TestFindConjugate(unittest.TestCase):
 
         self.assertEqual(result_lat, expected_lat)
         self.assertEqual(result_lon, expected_lon)
-
-
-if __name__ == '__main__':
-    unittest.main()
