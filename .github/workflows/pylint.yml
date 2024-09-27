@@ -1,6 +1,6 @@
 name: Pylint
 
-on: [push]
+on: [push, pull_request]
 
 jobs:
   build:
@@ -22,3 +22,8 @@ jobs:
     - name: Analysing the code with pylint
       run: |
         pylint $(git ls-files '*.py')
+    - name: Run unit and integration tests
+      run: |
+        coverage run --rcfile=pyproject.toml -m unittest discover
+        coverage report
+        coverage xml --rcfile=pyproject.toml
