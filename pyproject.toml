@@ -51,14 +51,6 @@ classifiers = [
     "Programming Language :: Python :: 3.9",
 ]
 
-[project.optional-dependencies]
-test = [
-     "coverage[toml]",
-     "flake8",
-     "packaging",
-     "requests",
-]
-
 [project.urls]
 source = "https://github.com/KCollins/conjugate_map"
 documentation = "https://conjugate-map.readthedocs.io/en/latest"
