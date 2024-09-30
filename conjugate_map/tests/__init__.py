@@ -2,7 +2,7 @@
 
 Note
 ----
-This file must remain empty of code for pytest to function.
+This file must remain empty of code for Python tests to function.
 
 
 """
