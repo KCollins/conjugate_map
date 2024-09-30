@@ -51,6 +51,12 @@ classifiers = [
     "Programming Language :: Python :: 3.9",
 ]
 
+[project.optional-dependencies]
+test = [
+     "coverage[toml]",
+     "pylint",
+]
+
 [project.urls]
 source = "https://github.com/KCollins/conjugate_map"
 documentation = "https://conjugate-map.readthedocs.io/en/latest"
