@@ -22,13 +22,11 @@ class TestFindConjugate(unittest.TestCase):
         self.method = 'geopack'
         self.expected_lat = 0.0
         self.expected_lon = 0.0
-        return
 
     def tearDown(self):
         """Clean up the test environment."""
         del self.ut, self.lat, self.lon, self.method, self.expected_lat
         del self.expected_lon
-        return
 
     def eval_findconj(self):
         """Evaluate the `findconj` function."""
@@ -38,7 +36,6 @@ class TestFindConjugate(unittest.TestCase):
         # Assert that the returned values are close enough to expected values
         self.assertAlmostEqual(result_lat, self.expected_lat, delta=1)
         self.assertAlmostEqual(result_lon, self.expected_lon, delta=1)
-        return
 
     def test_geopack_method_north(self):
         """
@@ -48,7 +45,6 @@ class TestFindConjugate(unittest.TestCase):
         self.expected_lon = 65.63983817802247
 
         self.eval_findconj()
-        return
 
     def test_geopack_method_south(self):
         """
@@ -61,7 +57,6 @@ class TestFindConjugate(unittest.TestCase):
         self.expected_lon = 291.07394597054764
 
         self.eval_findconj()
-        return
 
     def test_aacgm_method(self):
         """
@@ -73,7 +68,6 @@ class TestFindConjugate(unittest.TestCase):
         self.method = "aacgm"
 
         self.eval_findconj()
-        return
 
     def test_auto_method_north(self):
         """
@@ -88,7 +82,6 @@ class TestFindConjugate(unittest.TestCase):
         self.expected_lon = 359.0781222221389
 
         self.eval_findconj()
-        return
 
     def test_auto_method_south(self):
         """
@@ -103,7 +96,6 @@ class TestFindConjugate(unittest.TestCase):
         self.expected_lon = -62.838832111320556
 
         self.eval_findconj()
-        return
 
     def test_invalid_method(self):
         """
@@ -114,4 +106,3 @@ class TestFindConjugate(unittest.TestCase):
         self.method = 'invalid_method'
 
         self.eval_findconj()
-        return
