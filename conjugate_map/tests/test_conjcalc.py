@@ -41,6 +41,7 @@ class TestFindConjugate(unittest.TestCase):
         """
         Test `findconj` with 'geopack' method for a northern hemisphere point.
         """
+        self.ut = dt.datetime(1980, 11, 3, 18, 0, 0)
         self.expected_lat = 65.38287134065757
         self.expected_lon = 65.63983817802247
 
