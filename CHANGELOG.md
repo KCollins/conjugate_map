@@ -7,6 +7,8 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 --------------------
 * Updated style to conform to Python standards
 * Added installation to linting tests
+* Added API to documentation
+* Added unit tests
 
 [0.2.0] - 2024-05-23
 --------------------

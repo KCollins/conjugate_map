@@ -16,27 +16,36 @@ import pandas as pd
 def findconj(lat, lon, ut=dt.datetime.now(tz=dt.timezone.utc),
              is_verbose=False, method='aacgm', limit=60):
 
+    """Calculate the geographic latitudes and longitudes of conjugate point for
+        given set of coordinates.
+
+    Parameters
+    ----------
+    lat         : float
+            Geographic latitude of station.
+    lon         : float
+            Geographic longitude of station.
+    ut          : datetime
+            Datetime used in conversion.
+    is_verbose  : boolean
+            If set to True, prints debugging text
+    method      : string
+            Defines method used in conversion. Options are 'auto', 'geopack',
+            which uses IGRF + T89 to run field line traces,
+            or 'aacgm', which uses AACGM v2.
+    limit       : float
+            Latitude limit, in degrees, used to switch between
+            methods in auto mode. Default: 60.
+            AACGM will converge above 35 degrees, but may be
+            erroneous. See www.doi.org/10.1002/2014JA020264
+
+    Returns
+    -------
+    lat, lon    : float
+        Latitude, longitude of conjugate points
+
     """
-    Calculate the geographic latitudes and longitudes of conjugate point for a
-    given set of coordinates.
 
-    Arguments:
-        lat         : geographic latitude of station
-        lon         : geographic longitude of station
-        ut          : datetime used in conversion
-        is_verbose  : if set to True, prints debugging text
-        method      : method used in conversion. Options are 'auto', 'geopack',
-                        which uses IGRF + T89 to run field line traces,
-                        or 'aacgm', which uses AACGM v2.
-        limit       : latitude limit, in degrees, used to switch between
-                        methods in auto mode. Default: 60.
-                        AACGM will converge above 35 degrees, but may be
-                        erroneous. See www.doi.org/10.1002/2014JA020264
-
-
-    Returns:
-        lat, lon    : latitude, longitude of conjugate points
-    """
     method = method.lower()  # Cast method as lowercase
 
     if method == 'auto':
@@ -116,7 +125,7 @@ def findconj(lat, lon, ut=dt.datetime.now(tz=dt.timezone.utc),
             print(lat, lon)
         return lat, lon
 
-    elif method == "aacgm":
+    if method == "aacgm":
         if is_verbose:
             print('............................................'
                   'Calculating conjugate point for ' + str(lat) + ', '
@@ -130,8 +139,8 @@ def findconj(lat, lon, ut=dt.datetime.now(tz=dt.timezone.utc),
             print('Conjugate geographic lat/lon: ' + str([glat_con, glon_con]))
         return glat_con, glon_con
 
-    else:
-        print('Method is not listed.')
+    print('Method is not listed.')
+    return 0, 0
 
 
 ###############################################################################
@@ -140,39 +149,79 @@ def conjcalc(gdf, latname="GLAT", lonname="GLON",
              dtime=dt.datetime.now(tz=dt.timezone.utc),
              is_verbose=False, method='aacgm', mode='S2N',
              is_saved=False, directory='output/', name='stations'):
-    """
-    Calculate the geographic latitudes and longitudes of conjugate points for
-    all points in a dataframe. Calls findconj().
 
-    Arguments:
-        gdf         : dataframe of points whose conjugate points we're finding
-        latname     : name of column containing latitude coordinates
-        lonname     : name of column containing longitude coordinates
-        dtime       : datetime used in conversion
-        is_verbose  : if set to True/1, prints debugging text
-        method      : method used in conversion, passed to findconj().
-                        Options are 'geopack', which uses IGRF + T89 to run
-                        field line traces, or 'aacgm'.
-        mode        :
-                                 'S2N'     : Return station coordinates for
-                                              northern hemisphere, conjugate
-                                              for southern. Map appears over
-                                              the Arctic. Default.
-                                 'N2S'     : Return station coordinates for
-                                              southern hemisphere, conjugate
-                                              for northern. Map appears over
-                                              the Antarctic.
-                                 'flip'    : Return conjugate coordinates for
-                                             points regardless of hemisphere.
-        is_saved    : Boolean dictating whether the final .csv is saved to
-                        the output directory.
-        directory   : Name of local directory to which .csv is saved;
-                        'output/' by default.
-        name        : First part of saved filename. 'stations' by default.
+    """Calculate the geographic latitudes and longitudes of conjugate points
+        for all points in a dataframe. Calls findconj().
 
-    Returns:
-        gdf         : dataframe with PLAT, PLON columns added indicating which
-                        points to plot
+    Parameters
+    ----------
+    lat         : float
+            Geographic latitude of station.
+    lon         : float
+            Geographic longitude of station.
+    ut          : datetime
+            Datetime used in conversion.
+    is_verbose  : boolean
+            If set to True, prints debugging text
+    method      : string
+            Defines method used in conversion. Options are 'auto', 'geopack',
+            which uses IGRF + T89 to run field line traces,
+            or 'aacgm', which uses AACGM v2.
+    limit       : float
+            Latitude limit, in degrees, used to switch between
+            methods in auto mode. Default: 60.
+            AACGM will converge above 35 degrees, but may be
+            erroneous. See www.doi.org/10.1002/2014JA020264
+            gdf         : dataframe of points whose conjugate points we're finding
+    latname     : string
+            Name of column containing latitude coordinates.
+    lonname     : string
+            Name of column containing longitude coordinates.
+    dtime       : datetime
+            Datetime used in conversion.
+    is_verbose  : boolean
+            If set to True/1, prints debugging text
+    method      : string
+            Method used in conversion, passed to findconj().
+            Options are 'geopack', which uses IGRF + T89 to run
+            field line traces, or 'aacgm'.
+    mode        : string
+                    'S2N'     : 
+                                Return station coordinates for
+                                northern hemisphere, conjugate
+                                for southern. Map appears over
+                                the Arctic. Default.
+                    'N2S'     : 
+                                Return station coordinates for
+                                southern hemisphere, conjugate
+                                for northern. Map appears over
+                                the Antarctic.
+                    'flip'    : 
+                                Return conjugate coordinates for
+                                points regardless of hemisphere.
+    is_saved    : boolean
+        Boolean dictating whether the final .csv is saved to
+        the output directory.
+    directory   : string
+        Name of local directory to which .csv is saved;
+        'output/' by default.
+    name        : string
+        First part of saved filename. 'stations' by default.
+
+    Returns
+    -------
+    gdf         : pandas.DataFrame
+        Dataframe with PLAT, PLON columns added indicating which
+        points to plot
+
+    See Also
+    --------
+    conjugate_map.findconj
+
+    Note
+    ----
+    Calls findconj for each entry in the dataframe.
+
     """
 
     gdf['Hemisphere'] = np.nan
@@ -181,74 +230,61 @@ def conjcalc(gdf, latname="GLAT", lonname="GLON",
 
     # Iterate over the DataFrame
     for index, row in gdf.iterrows():
-        try:
-            lat = row[latname]
-            lon = row[lonname]
+        lat = row[latname]
+        lon = row[lonname]
+        if is_verbose:
+            print('Checking hemisphere.')
+        if isinstance(lon, str):
             if is_verbose:
-                print('Checking hemisphere.')
-            if isinstance(lon, str):
-                if is_verbose:
-                    print('Longitude encoded as string. Fixing...')
-                try:
-                    lon = lon.replace('−', '-')
-                    lon = float(lon)
-                except Exception as e:
-                    print(e)
-                    continue
-            if isinstance(lat, str):
-                if is_verbose:
-                    print('Latitude encoded as string. Fixing...')
-                try:
-                    lat = lat.replace('−', '-')
-                    lat = float(lat)
-                    if is_verbose:
-                        print('Now floats: ' + str([lat, lon]))
-                except Exception as e:
-                    print(e)
-                    continue
-            # print(type(lon))
-            if lon > 180:
-                lon = lon-360
+                print('Longitude encoded as string. Fixing...')
             try:
-                [clat, clon] = findconj(lat, lon, dtime, is_verbose=is_verbose,
-                                        method=method)
-                if is_verbose:
-                    print('Conjugate latitude and longitude: ')
-                    print([clat, clon])
-                gdf.loc[index, 'PLAT'], gdf.loc[index, 'PLON'] = [clat, clon]
-            except Exception as e:
-                print('Ran into a problem with ' + index)
+                lon = lon.replace('−', '-')
+                lon = float(lon)
+            except ValueError as e:
                 print(e)
+                continue
+        if isinstance(lat, str):
+            if is_verbose:
+                print('Latitude encoded as string. Fixing...')
+            lat = lat.replace('−', '-')
+            lat = float(lat)
+            if is_verbose:
+                print('Now floats: ' + str([lat, lon]))
 
-            # Figure out what coordinates we ultimately want to plot:
-            if lat > 0:
-                if is_verbose:
-                    print('Setting Northern hemisphere for GLAT of ' + str(lat)
-                          + ' on station ' + index)
-                gdf.loc[index, 'Hemisphere'] = 'N'
-                if (mode == 'N2S' or mode == 'flip'):
-                    gdf.loc[index, 'PLAT'] = clat
-                    gdf.loc[index, 'PLON'] = clon
-                else:
-                    gdf.loc[index, 'PLAT'] = lat
-                    gdf.loc[index, 'PLON'] = lon
+        if lon > 180:
+            lon = lon-360
 
+        [clat, clon] = findconj(lat, lon, dtime, is_verbose=is_verbose,
+                                method=method)
+        if is_verbose:
+            print('Conjugate latitude and longitude: ')
+            print([clat, clon])
+        gdf.loc[index, 'PLAT'], gdf.loc[index, 'PLON'] = [clat, clon]
+
+        # Figure out what coordinates we ultimately want to plot:
+        if lat > 0:
+            if is_verbose:
+                print('Setting Northern hemisphere for GLAT of ' + str(lat)
+                      + ' on station ' + index)
+            gdf.loc[index, 'Hemisphere'] = 'N'
+            if mode in ('N2S', 'flip'):
+                gdf.loc[index, 'PLAT'] = clat
+                gdf.loc[index, 'PLON'] = clon
             else:
-                if is_verbose:
-                    print('Setting Southern hemisphere for GLAT of ' + str(lat)
-                          + ' on station ' + index)
-                gdf.loc[index, 'Hemisphere'] = 'S'
-                if (mode == 'S2N' or mode == 'flip'):
-                    gdf.loc[index, 'PLAT'] = clat
-                    gdf.loc[index, 'PLON'] = clon
-                else:
-                    gdf.loc[index, 'PLAT'] = lat
-                    gdf.loc[index, 'PLON'] = lon
+                gdf.loc[index, 'PLAT'] = lat
+                gdf.loc[index, 'PLON'] = lon
 
-        except Exception as e:
-            print('Ran into a problem with ' + str(index))
-            print(e)
-            continue
+        else:
+            if is_verbose:
+                print('Setting Southern hemisphere for GLAT of ' + str(lat)
+                      + ' on station ' + index)
+            gdf.loc[index, 'Hemisphere'] = 'S'
+            if mode in ('S2N', 'flip'):
+                gdf.loc[index, 'PLAT'] = clat
+                gdf.loc[index, 'PLON'] = clon
+            else:
+                gdf.loc[index, 'PLAT'] = lat
+                gdf.loc[index, 'PLON'] = lon
 
         if is_saved:
             filename = name + '_' + mode + '-' + method + '-' + str(dtime)
@@ -261,27 +297,37 @@ def conjcalc(gdf, latname="GLAT", lonname="GLON",
 
 def calc_mlat_rings(mlats, ut=dt.datetime.now(tz=dt.timezone.utc),
                     is_verbose=False, is_saved=False):
-    """
-    Calculate the geographic latitudes and longitudes of a circle of points
+
+    """Calculate the geographic latitudes and longitudes of a circle of points
     for a list of magnetic latitudes.
 
-    Arguments:
-        mlats       : list of magnetic latitudes
-        ut          : dt.datetime used in AACGMv2 conversion;
-                        by default, ut=dt.datetime.now(tz=dt.timezone.utc)
-        is_verbose  : if set to True/1, prints debugging text
-        is_saved    : if is_saved == True, saves .gpx versions
+    Parameters
+    ----------
+    mlats       : np.array
+            List of magnetic latitudes
+    ut          : dt.datetime
+            Datetime used in AACGMv2 conversion;
+            by default, ut=dt.datetime.now(tz=dt.timezone.utc)
+    is_verbose  : boolean
+            If set to True/1, prints debugging text.
+    is_saved    : boolean
+            If is_saved == True, saves .gpx versions.
                         to local output directory
 
-    Returns:
-        mlats_dct: dictionary with geographic latitude and longitude
-                    points for each of the specified magnetic latitudes
+    Returns
+    -------
+    mlats_dct: dict
+        Dictionary with geographic latitude and longitude
+        points for each of the specified magnetic latitudes.
 
-    Example use: Saves .gpx magnetic graticules for 1 January 2020 every 5
-                degrees latitude:
+    Example Use
+    ------------
+    Saves .gpx magnetic graticules for 1 January 2020 every 5
+    degrees latitude::
 
-                 rings = calc_mlat_rings(list(range(-90, 90, 5)), ut =
-                            dt.datetime(2020, 1, 1), is_saved = True)
+        rings = calc_mlat_rings(list(range(-90, 90, 5)), ut =
+                        dt.datetime(2020, 1, 1), is_saved = True)
+
     """
     mlons = np.arange(0, 360)
     mlats_dct = {}
@@ -322,7 +368,8 @@ def calc_mlat_rings(mlats, ut=dt.datetime.now(tz=dt.timezone.utc),
 
             # print(gpx.to_xml())
 
-            with open('output/graticules/'+filename+'.gpx', 'w') as f:
+            with open('output/graticules/'+filename+'.gpx', 'w',
+                      encoding="utf-8") as f:
                 f.write(gpx.to_xml())
             if is_verbose:
                 print('Writing ' + filename + " to gpx. ")

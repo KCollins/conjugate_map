@@ -51,16 +51,29 @@ classifiers = [
     "Programming Language :: Python :: 3.9",
 ]
 
+[project.optional-dependencies]
+test = [
+     "coverage[toml]",
+     "pylint",
+]
+
 [project.urls]
 source = "https://github.com/KCollins/conjugate_map"
+documentation = "https://conjugate-map.readthedocs.io/en/latest"
 download = "https://github.com/KCollins/conjugate_map/releases"
+
+[tool.coverage.run]
+relative_files = true
+include = ["*/conjugate_map/*",
+           "*/conjugate_map/tests/*"]
+
+[tool.coverage.paths]
+ocb_paths = ["conjugate_map/",
+             "*/lib/*/site-packages/conjugate_map"]
 
 [tool.setuptools]
 packages = ["conjugate_map"]
 
-[tool.poetry.scripts]
-my_script = "python conj_calc.py"
-
 [tool.pylint.'MESSAGES CONTROL']
 max-line-length = 120
-disable = "R0912,R0913,R0914,R0915"
+disable = "R0912,R0913,R0914,R0915,R0917,C0103,W0622"

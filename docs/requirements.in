@@ -1,0 +1,14 @@
+aacgmv2
+conjugate_map
+datetime
+geopack
+geopandas
+gpxpy
+lxml
+numpy
+ogr
+pandas
+plotly.express
+Sphinx>=5,<6
+sphinx_rtd_theme
+xlrd
