@@ -5,9 +5,6 @@
 # ----------------------------------------------------------------------------
 """Integration and unit test suite for conj_calc methods."""
 
-if __name__ == "__main__":
-    unittest.main(verbosity=4)
-
 import datetime as dt
 import unittest
 
