@@ -22,3 +22,6 @@ To install from pypi:
 
 To install from source: 
 Clone git repo and run `python -m pip install .` from top level of directory.
+
+## Testing
+To test locally, run `python -m unittest` from top level of directory.

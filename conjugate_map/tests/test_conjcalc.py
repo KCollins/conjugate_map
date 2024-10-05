@@ -5,6 +5,9 @@
 # ----------------------------------------------------------------------------
 """Integration and unit test suite for conj_calc methods."""
 
+if __name__ == "__main__":
+    unittest.main(verbosity=4)
+
 import datetime as dt
 import unittest
 
@@ -42,8 +45,10 @@ class TestFindConjugate(unittest.TestCase):
         Test `findconj` with 'geopack' method for a northern hemisphere point.
         """
         self.ut = dt.datetime(1980, 11, 3, 18, 0, 0)
-        self.expected_lat = 65.38287134065757
-        self.expected_lon = 65.63983817802247
+        self.lat = 88  # Latitude in degrees (positive for north)
+        self.lon = 88  # Longitude in degrees
+        self.expected_lat = 88.08939422060968
+        self.expected_lon = 98.3011528002826
 
         self.eval_findconj()
 
