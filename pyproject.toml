@@ -19,9 +19,6 @@ dependencies = [
     "pandas",
     "plotly",
 ]
-optional-dependencies = [
-    "apexpy",
-]
 readme = "README.md"
 keywords = [
     "coordinates",
@@ -58,6 +55,7 @@ classifiers = [
 test = [
      "coverage[toml]",
      "pylint",
+     "apexpy",
 ]
 
 [project.urls]
