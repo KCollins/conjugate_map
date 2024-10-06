@@ -19,6 +19,9 @@ dependencies = [
     "pandas",
     "plotly",
 ]
+optional-dependencies = [
+    "apexpy",
+]
 readme = "README.md"
 keywords = [
     "coordinates",
