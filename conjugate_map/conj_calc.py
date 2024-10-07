@@ -4,6 +4,7 @@
 import datetime as dt
 import os
 
+from apexpy import Apex
 import aacgmv2
 from geopack import geopack as gp
 import gpxpy
@@ -14,7 +15,7 @@ import pandas as pd
 
 ###############################################################################
 def findconj(lat, lon, ut=dt.datetime.now(tz=dt.timezone.utc),
-             is_verbose=False, method='aacgm', limit=60):
+             is_verbose=False, method='aacgm', limit=60, alt = 300):
 
     """Calculate the geographic latitudes and longitudes of conjugate point for
         given set of coordinates.
@@ -32,12 +33,15 @@ def findconj(lat, lon, ut=dt.datetime.now(tz=dt.timezone.utc),
     method      : string
             Defines method used in conversion. Options are 'auto', 'geopack',
             which uses IGRF + T89 to run field line traces,
-            or 'aacgm', which uses AACGM v2.
+            'aacgm', which uses AACGM v2, or
+            'apex', which uses apexpy.
     limit       : float
             Latitude limit, in degrees, used to switch between
             methods in auto mode. Default: 60.
             AACGM will converge above 35 degrees, but may be
             erroneous. See www.doi.org/10.1002/2014JA020264
+    alt         : float
+            Altitude for apex calculations, in m. 300 by default.
 
     Returns
     -------
@@ -135,6 +139,17 @@ def findconj(lat, lon, ut=dt.datetime.now(tz=dt.timezone.utc),
             print('Magnetic lat/lon: ' + str([mlat, mlon]))
         glat_con, glon_con, _ = aacgmv2.convert_latlon(
             -1.*mlat, mlon, 0, ut, 'A2G')
+        if is_verbose:
+            print('Conjugate geographic lat/lon: ' + str([glat_con, glon_con]))
+        return glat_con, glon_con
+
+    if method == "apex":
+        if is_verbose:
+            print('............................................'
+                  'Calculating conjugate point for ' + str(lat) + ', '
+                  + str(lon) + ' at ' + str(ut) + ' with apexpy: ')
+        apexut = Apex(ut)
+        glat_con, glon_con = apexut.convert(lat, lon, 'geo', 'apex', height=alt)
         if is_verbose:
             print('Conjugate geographic lat/lon: ' + str([glat_con, glon_con]))
         return glat_con, glon_con
