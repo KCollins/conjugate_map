@@ -3,7 +3,7 @@ Usage
 
 .. _installation:
 
-Installation
+Install
 ------------
 To install from pypi: ``pip install conjugate-map``
 
