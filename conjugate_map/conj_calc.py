@@ -11,6 +11,10 @@ import gpxpy.gpx
 import numpy as np
 import pandas as pd
 
+# Logging:
+import logging
+logger = logging.getLogger(__name__)
+logging.basicConfig(filename='conjcalc.log', level=logging.DEBUG)
 
 ###############################################################################
 def findconj(lat, lon, ut=dt.datetime.now(tz=dt.timezone.utc),
