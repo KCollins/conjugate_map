@@ -57,15 +57,13 @@ def findconj(lat, lon, ut=dt.datetime.now(tz=dt.timezone.utc),
             method = 'aacgm'
         else:
             method = 'geopack'
-        if is_verbose:
-            print("Setting method according to latitude limits: " + method)
+        logger.info("Setting method according to latitude limits: " + method)
 
     if method == 'geopack':
         ut = ut.timestamp()
         ps = gp.recalc(ut)  # pylint: disable=unused-variable # noqa: F841
         # Lint doesn't like it, but geopack needs this command.
-        if is_verbose:
-            print('............................................'
+        logger.info('............................................'
                   'Calculating conjugate point for ' + str(lat) + ', '
                   + str(lon) + ' at ' + str(ut) + ' with geopack: ')
 
@@ -74,21 +72,18 @@ def findconj(lat, lon, ut=dt.datetime.now(tz=dt.timezone.utc),
         # Pole) to 360 (South Pole)); phi is longitude in degrees.
 
         theta, phi = np.deg2rad([theta, phi])
-        if is_verbose:
-            print('r, theta, phi: ')
-            print(r, theta, phi)
+        logger.info('r, theta, phi: ')
+        logger.info(r, theta, phi)
         xgeo, ygeo, zgeo = gp.sphcar(r, theta, phi, 1)
-        if is_verbose:
-            print('Cartesian output: ')
-            print(xgeo, ygeo, zgeo)
-            print('Sum of squares (should be 1):')
-            print(xgeo**2 + ygeo**2 + zgeo**2)
-            print('GSM coordinates: ')
+        logger.info('Cartesian output: ')
+        logger.info(xgeo, ygeo, zgeo)
+        logger.info('Sum of squares (should be 1):')
+        logger.info(xgeo**2 + ygeo**2 + zgeo**2)
+        logger.info('GSM coordinates: ')
         xgsm, ygsm, zgsm = gp.geogsm(xgeo, ygeo, zgeo, 1)
-        if is_verbose:
-            print(xgsm, ygsm, zgsm)
-            print('Sum of squares (should be 1):')
-            print(xgsm**2 + ygsm**2 + zgsm**2)
+        logger.info(xgsm, ygsm, zgsm)
+        logger.info('Sum of squares (should be 1):')
+        logger.info(xgsm**2 + ygsm**2 + zgsm**2)
 
         # Now let's try running the field line trace: help(gp.trace) for doc.
         rlim, r0 = [1000, .9]
@@ -97,53 +92,44 @@ def findconj(lat, lon, ut=dt.datetime.now(tz=dt.timezone.utc),
                              parmod=2, exname='t89', inname='igrf')
 
         x1gsm, y1gsm, z1gsm = fieldline[0:3]
-        if is_verbose:
-            print('Traced GSM Coordinates, Cartesian: ')
-            print(x1gsm, y1gsm, z1gsm)
-            print(str(len(fieldline[4])) + ' points in traced vector.')
-            print('Sum of squares (should be 1):')
-            print(x1gsm**2 + y1gsm**2 + z1gsm**2)
+        logger.info('Traced GSM Coordinates, Cartesian: ')
+        logger.info(x1gsm, y1gsm, z1gsm)
+        logger.info(str(len(fieldline[4])) + ' points in traced vector.')
+        logger.info('Sum of squares (should be 1):')
+        logger.info(x1gsm**2 + y1gsm**2 + z1gsm**2)
 
         # geogsm
         x1geo, y1geo, z1geo = gp.geogsm(x1gsm, y1gsm, z1gsm, -1)
-        if is_verbose:
-            print('Geographic coordinates, Cartesian: ')
-            print(x1geo, y1geo, z1geo)
-            print('Sum of squares (should be 1):')
-            print(x1geo**2 + y1geo**2 + z1geo**2)
+        logger.info('Geographic coordinates, Cartesian: ')
+        logger.info(x1geo, y1geo, z1geo)
+        logger.info('Sum of squares (should be 1):')
+        logger.info(x1geo**2 + y1geo**2 + z1geo**2)
 
         # convert back to spherical
-        if is_verbose:
-            print('Geographic coordinates, spherical: ')
+        logger.info('Geographic coordinates, spherical: ')
         [x1_r, x1_theta, x1_phi] = gp.sphcar(x1geo, y1geo, z1geo, -1)
-        if is_verbose:
-            print(x1_r, x1_theta, x1_phi)
+        logger.info(x1_r, x1_theta, x1_phi)
 
         # back to lat/long:
         x1_theta, x1_phi = np.rad2deg([x1_theta, x1_phi])
-        if is_verbose:
-            print('Lat/lon of conjugate point: ')
+        logger.info('Lat/lon of conjugate point: ')
         lat = 90-x1_theta
         lon = x1_phi
-        if is_verbose:
-            print(lat, lon)
+        logger.info(lat, lon)
         return lat, lon
 
     if method == "aacgm":
-        if is_verbose:
-            print('............................................'
+        logger.info('............................................'
                   'Calculating conjugate point for ' + str(lat) + ', '
                   + str(lon) + ' at ' + str(ut) + ' with AACGMV2: ')
         mlat, mlon, _ = aacgmv2.convert_latlon(lat, lon, 0, ut, 'G2A')
-        if is_verbose:
-            print('Magnetic lat/lon: ' + str([mlat, mlon]))
+        logger.info('Magnetic lat/lon: ' + str([mlat, mlon]))
         glat_con, glon_con, _ = aacgmv2.convert_latlon(
             -1.*mlat, mlon, 0, ut, 'A2G')
-        if is_verbose:
-            print('Conjugate geographic lat/lon: ' + str([glat_con, glon_con]))
+        logger.info('Conjugate geographic lat/lon: ' + str([glat_con, glon_con]))
         return glat_con, glon_con
 
-    print('Method is not listed.')
+    logger.info('Method is not listed.')
     return 0, 0
 
 
@@ -236,39 +222,33 @@ def conjcalc(gdf, latname="GLAT", lonname="GLON",
     for index, row in gdf.iterrows():
         lat = row[latname]
         lon = row[lonname]
-        if is_verbose:
-            print('Checking hemisphere.')
+        logger.info('Checking hemisphere.')
         if isinstance(lon, str):
-            if is_verbose:
-                print('Longitude encoded as string. Fixing...')
+            logger.info('Longitude encoded as string. Fixing...')
             try:
                 lon = lon.replace('−', '-')
                 lon = float(lon)
             except ValueError as e:
-                print(e)
+                logger.warning(e)
                 continue
         if isinstance(lat, str):
-            if is_verbose:
-                print('Latitude encoded as string. Fixing...')
+            logger.info('Latitude encoded as string. Fixing...')
             lat = lat.replace('−', '-')
             lat = float(lat)
-            if is_verbose:
-                print('Now floats: ' + str([lat, lon]))
+            logger.info('Now floats: ' + str([lat, lon]))
 
         if lon > 180:
             lon = lon-360
 
         [clat, clon] = findconj(lat, lon, dtime, is_verbose=is_verbose,
                                 method=method)
-        if is_verbose:
-            print('Conjugate latitude and longitude: ')
-            print([clat, clon])
+        logger.info('Conjugate latitude and longitude: ')
+        logger.info([clat, clon])
         gdf.loc[index, 'PLAT'], gdf.loc[index, 'PLON'] = [clat, clon]
 
         # Figure out what coordinates we ultimately want to plot:
         if lat > 0:
-            if is_verbose:
-                print('Setting Northern hemisphere for GLAT of ' + str(lat)
+            logger.info('Setting Northern hemisphere for GLAT of ' + str(lat)
                       + ' on station ' + index)
             gdf.loc[index, 'Hemisphere'] = 'N'
             if mode in ('N2S', 'flip'):
@@ -279,8 +259,7 @@ def conjcalc(gdf, latname="GLAT", lonname="GLON",
                 gdf.loc[index, 'PLON'] = lon
 
         else:
-            if is_verbose:
-                print('Setting Southern hemisphere for GLAT of ' + str(lat)
+            logger.info('Setting Southern hemisphere for GLAT of ' + str(lat)
                       + ' on station ' + index)
             gdf.loc[index, 'Hemisphere'] = 'S'
             if mode in ('S2N', 'flip'):
@@ -346,8 +325,7 @@ def calc_mlat_rings(mlats, ut=dt.datetime.now(tz=dt.timezone.utc),
         mlats_dct[mlat] = {'glats': glats, 'glons': glons}
 
         if is_saved is True:
-            if is_verbose:
-                print('Saving magnetic graticule for ' + str(mlat) +
+            logger.info('Saving magnetic graticule for ' + str(mlat) +
                       ' degrees magnetic latitude.')
             filename = 'Graticule_ ' + str(mlat) + '_' + str(ut)
             directory = 'output/'
@@ -370,12 +348,10 @@ def calc_mlat_rings(mlats, ut=dt.datetime.now(tz=dt.timezone.utc),
                 gpx_segment.points.append(gpxpy.gpx.GPXTrackPoint(
                     df.loc[idx, 'MLAT'], df.loc[idx, 'MLON']))
 
-            # print(gpx.to_xml())
+        logger.info(gpx.to_xml())
 
-            with open('output/graticules/'+filename+'.gpx', 'w',
-                      encoding="utf-8") as f:
-                f.write(gpx.to_xml())
-            if is_verbose:
-                print('Writing ' + filename + " to gpx. ")
-
+        with open('output/graticules/'+filename+'.gpx', 'w',
+                  encoding="utf-8") as f:
+            f.write(gpx.to_xml())
+            logger.info('Writing ' + filename + " to gpx. ")
     return mlats_dct
