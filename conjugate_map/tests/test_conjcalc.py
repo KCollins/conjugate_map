@@ -49,6 +49,18 @@ class TestFindConjugate(unittest.TestCase):
 
         self.eval_findconj()
 
+    def test_apexpy_method_north(self):
+        """
+        Test `findconj` with 'apexpy' method for a northern hemisphere point.
+        """
+        self.ut = dt.datetime(1980, 11, 3, 18, 0, 0)
+        self.lat = -88  # Latitude in degrees (positive for north)
+        self.lon = 0  # Longitude in degrees
+        self.expected_lat = -73.19690704345703
+        self.expected_lon = 22.06223487854004
+
+        self.eval_findconj()
+
     def test_geopack_method_south(self):
         """
         Test `findconj` with 'geopack' method for a southern hemisphere point.
