@@ -2,12 +2,8 @@
 
 # Importing packages
 import datetime as dt
-import os
-
-# Logging:
 import logging
-logger = logging.getLogger(__name__)
-logging.basicConfig(filename='conjcalc.log', level=logging.DEBUG)
+import os
 
 import aacgmv2
 from geopack import geopack as gp
@@ -16,10 +12,13 @@ import gpxpy.gpx
 import numpy as np
 import pandas as pd
 
+logger = logging.getLogger(__name__)
+logging.basicConfig(filename='conjcalc.log', level=logging.DEBUG)
+
 
 ###############################################################################
 def findconj(lat, lon, ut=dt.datetime.now(tz=dt.timezone.utc),
-             is_verbose=False, method='aacgm', limit=60):
+             method='aacgm', limit=60):
 
     """Calculate the geographic latitudes and longitudes of conjugate point for
         given set of coordinates.
@@ -32,8 +31,6 @@ def findconj(lat, lon, ut=dt.datetime.now(tz=dt.timezone.utc),
             Geographic longitude of station.
     ut          : datetime
             Datetime used in conversion.
-    is_verbose  : boolean
-            If set to True, prints debugging text
     method      : string
             Defines method used in conversion. Options are 'auto', 'geopack',
             which uses IGRF + T89 to run field line traces,
@@ -138,7 +135,7 @@ def findconj(lat, lon, ut=dt.datetime.now(tz=dt.timezone.utc),
 
 def conjcalc(gdf, latname="GLAT", lonname="GLON",
              dtime=dt.datetime.now(tz=dt.timezone.utc),
-             is_verbose=False, method='aacgm', mode='S2N',
+             method='aacgm', mode='S2N',
              is_saved=False, directory='output/', name='stations'):
 
     """Calculate the geographic latitudes and longitudes of conjugate points
@@ -153,8 +150,6 @@ def conjcalc(gdf, latname="GLAT", lonname="GLON",
             Geographic longitude of station.
     ut          : datetime
             Datetime used in conversion.
-    is_verbose  : boolean
-            If set to True, prints debugging text
     method      : string
             Defines method used in conversion. Options are 'auto', 'geopack',
             which uses IGRF + T89 to run field line traces,
@@ -241,8 +236,7 @@ def conjcalc(gdf, latname="GLAT", lonname="GLON",
         if lon > 180:
             lon = lon-360
 
-        [clat, clon] = findconj(lat, lon, dtime, is_verbose=is_verbose,
-                                method=method)
+        [clat, clon] = findconj(lat, lon, dtime, method=method)
         logger.info('Conjugate latitude and longitude: ')
         logger.info([clat, clon])
         gdf.loc[index, 'PLAT'], gdf.loc[index, 'PLON'] = [clat, clon]
@@ -278,7 +272,7 @@ def conjcalc(gdf, latname="GLAT", lonname="GLON",
 
 
 def calc_mlat_rings(mlats, ut=dt.datetime.now(tz=dt.timezone.utc),
-                    is_verbose=False, is_saved=False):
+                    is_saved=False):
 
     """Calculate the geographic latitudes and longitudes of a circle of points
     for a list of magnetic latitudes.
@@ -290,8 +284,6 @@ def calc_mlat_rings(mlats, ut=dt.datetime.now(tz=dt.timezone.utc),
     ut          : dt.datetime
             Datetime used in AACGMv2 conversion;
             by default, ut=dt.datetime.now(tz=dt.timezone.utc)
-    is_verbose  : boolean
-            If set to True/1, prints debugging text.
     is_saved    : boolean
             If is_saved == True, saves .gpx versions.
                         to local output directory
