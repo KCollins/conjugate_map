@@ -61,8 +61,7 @@ def findconj(lat, lon, ut=dt.datetime.now(tz=dt.timezone.utc),
         ut = ut.timestamp()
         ps = gp.recalc(ut)  # pylint: disable=unused-variable # noqa: F841
         # Lint doesn't like it, but geopack needs this command.
-        logger.info('............................................'
-                    'Calculating conjugate for %s, %s at %s via geopack:'
+        logger.info('.....Calculating conjugate for %s, %s at %s via geopack:'
                     , str(lat), str(lon), str(ut))
 
         r, theta, phi = [1, 90-lat, lon]
@@ -71,15 +70,15 @@ def findconj(lat, lon, ut=dt.datetime.now(tz=dt.timezone.utc),
 
         theta, phi = np.deg2rad([theta, phi])
         logger.info('r, theta, phi: ')
-        logger.info(r, theta, phi)
+        logger.info([r, theta, phi])
         xgeo, ygeo, zgeo = gp.sphcar(r, theta, phi, 1)
         logger.info('Cartesian output: ')
-        logger.info(xgeo, ygeo, zgeo)
+        logger.info([xgeo, ygeo, zgeo])
         logger.info('Sum of squares (should be 1):')
         logger.info(xgeo**2 + ygeo**2 + zgeo**2)
         logger.info('GSM coordinates: ')
         xgsm, ygsm, zgsm = gp.geogsm(xgeo, ygeo, zgeo, 1)
-        logger.info(xgsm, ygsm, zgsm)
+        logger.info([xgsm, ygsm, zgsm])
         logger.info('Sum of squares (should be 1):')
         logger.info(xgsm**2 + ygsm**2 + zgsm**2)
 
@@ -91,7 +90,7 @@ def findconj(lat, lon, ut=dt.datetime.now(tz=dt.timezone.utc),
 
         x1gsm, y1gsm, z1gsm = fieldline[0:3]
         logger.info('Traced GSM Coordinates, Cartesian: ')
-        logger.info(x1gsm, y1gsm, z1gsm)
+        logger.info([x1gsm, y1gsm, z1gsm])
         logger.info('%f points in traced vector.', len(fieldline[4]))
         logger.info('Sum of squares (should be 1):')
         logger.info(x1gsm**2 + y1gsm**2 + z1gsm**2)
@@ -99,26 +98,25 @@ def findconj(lat, lon, ut=dt.datetime.now(tz=dt.timezone.utc),
         # geogsm
         x1geo, y1geo, z1geo = gp.geogsm(x1gsm, y1gsm, z1gsm, -1)
         logger.info('Geographic coordinates, Cartesian: ')
-        logger.info(x1geo, y1geo, z1geo)
+        logger.info([x1geo, y1geo, z1geo])
         logger.info('Sum of squares (should be 1):')
         logger.info(x1geo**2 + y1geo**2 + z1geo**2)
 
         # convert back to spherical
         logger.info('Geographic coordinates, spherical: ')
         [x1_r, x1_theta, x1_phi] = gp.sphcar(x1geo, y1geo, z1geo, -1)
-        logger.info(x1_r, x1_theta, x1_phi)
+        logger.info([x1_r, x1_theta, x1_phi])
 
         # back to lat/long:
         x1_theta, x1_phi = np.rad2deg([x1_theta, x1_phi])
         logger.info('Lat/lon of conjugate point: ')
         lat = 90-x1_theta
         lon = x1_phi
-        logger.info(lat, lon)
+        logger.info([lat, lon])
         return lat, lon
 
     if method == "aacgm":
-        logger.info('............................................'
-                    'Calculating conjugate for %s, %s at %s via AACGMv2:',
+        logger.info('...Calculating conjugate for %s, %s at %s via AACGMv2:',
                     str(lat), str(lon), str(ut))
         mlat, mlon, _ = aacgmv2.convert_latlon(lat, lon, 0, ut, 'G2A')
         logger.info('Magnetic lat/lon: %s', str([mlat, mlon]))
@@ -243,8 +241,8 @@ def conjcalc(gdf, latname="GLAT", lonname="GLON",
 
         # Figure out what coordinates we ultimately want to plot:
         if lat > 0:
-            logger.info('Setting Northern hemisphere for GLAT of %f on station %f', lat, index)  # noqa: E501
-            gdf.loc[index, 'Hemisphere'] = 'N'
+            logger.info('Setting Northern hemisphere for GLAT of %f on station %s', lat, index)  # noqa: E501
+            gdf.loc[index, 'Hemisphere'] = "N"
             if mode in ('N2S', 'flip'):
                 gdf.loc[index, 'PLAT'] = clat
                 gdf.loc[index, 'PLON'] = clon
@@ -253,8 +251,8 @@ def conjcalc(gdf, latname="GLAT", lonname="GLON",
                 gdf.loc[index, 'PLON'] = lon
 
         else:
-            logger.info('Setting Southern hemisphere for GLAT of %f on station %f', lat, index)  # noqa: E501
-            gdf.loc[index, 'Hemisphere'] = 'S'
+            logger.info('Setting Southern hemisphere for GLAT of %f on station %s', lat, index)  # noqa: E501
+            gdf.loc[index, 'Hemisphere'] = "S"
             if mode in ('S2N', 'flip'):
                 gdf.loc[index, 'PLAT'] = clat
                 gdf.loc[index, 'PLON'] = clon
