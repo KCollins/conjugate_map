@@ -4,6 +4,11 @@
 import datetime as dt
 import os
 
+# Logging:
+import logging
+logger = logging.getLogger(__name__)
+logging.basicConfig(filename='conjcalc.log', level=logging.DEBUG)
+
 import aacgmv2
 from geopack import geopack as gp
 import gpxpy
@@ -11,10 +16,6 @@ import gpxpy.gpx
 import numpy as np
 import pandas as pd
 
-# Logging:
-import logging
-logger = logging.getLogger(__name__)
-logging.basicConfig(filename='conjcalc.log', level=logging.DEBUG)
 
 ###############################################################################
 def findconj(lat, lon, ut=dt.datetime.now(tz=dt.timezone.utc),
@@ -57,15 +58,15 @@ def findconj(lat, lon, ut=dt.datetime.now(tz=dt.timezone.utc),
             method = 'aacgm'
         else:
             method = 'geopack'
-        logger.info("Setting method according to latitude limits: " + method)
+        logger.info("Setting method according to latitude limits: %s", method)
 
     if method == 'geopack':
         ut = ut.timestamp()
         ps = gp.recalc(ut)  # pylint: disable=unused-variable # noqa: F841
         # Lint doesn't like it, but geopack needs this command.
         logger.info('............................................'
-                  'Calculating conjugate point for ' + str(lat) + ', '
-                  + str(lon) + ' at ' + str(ut) + ' with geopack: ')
+                    'Calculating conjugate for %s, %s at %s via geopack:'
+                    , str(lat), str(lon), str(ut))
 
         r, theta, phi = [1, 90-lat, lon]
         # r is Earth radii; theta is colatitude (i.e., in degrees from 0 (North
@@ -94,7 +95,7 @@ def findconj(lat, lon, ut=dt.datetime.now(tz=dt.timezone.utc),
         x1gsm, y1gsm, z1gsm = fieldline[0:3]
         logger.info('Traced GSM Coordinates, Cartesian: ')
         logger.info(x1gsm, y1gsm, z1gsm)
-        logger.info(str(len(fieldline[4])) + ' points in traced vector.')
+        logger.info('%f points in traced vector.', len(fieldline[4]))
         logger.info('Sum of squares (should be 1):')
         logger.info(x1gsm**2 + y1gsm**2 + z1gsm**2)
 
@@ -120,13 +121,13 @@ def findconj(lat, lon, ut=dt.datetime.now(tz=dt.timezone.utc),
 
     if method == "aacgm":
         logger.info('............................................'
-                  'Calculating conjugate point for ' + str(lat) + ', '
-                  + str(lon) + ' at ' + str(ut) + ' with AACGMV2: ')
+                    'Calculating conjugate for %s, %s at %s via AACGMv2:',
+                    str(lat), str(lon), str(ut))
         mlat, mlon, _ = aacgmv2.convert_latlon(lat, lon, 0, ut, 'G2A')
-        logger.info('Magnetic lat/lon: ' + str([mlat, mlon]))
+        logger.info('Magnetic lat/lon: %s', str([mlat, mlon]))
         glat_con, glon_con, _ = aacgmv2.convert_latlon(
             -1.*mlat, mlon, 0, ut, 'A2G')
-        logger.info('Conjugate geographic lat/lon: ' + str([glat_con, glon_con]))
+        logger.info('Conjugate geographic lat/lon: %f, %f', glat_con, glon_con)
         return glat_con, glon_con
 
     logger.info('Method is not listed.')
@@ -145,6 +146,7 @@ def conjcalc(gdf, latname="GLAT", lonname="GLON",
 
     Parameters
     ----------
+    gdf         : dataframe of points whose conjugate points we're finding
     lat         : float
             Geographic latitude of station.
     lon         : float
@@ -162,7 +164,6 @@ def conjcalc(gdf, latname="GLAT", lonname="GLON",
             methods in auto mode. Default: 60.
             AACGM will converge above 35 degrees, but may be
             erroneous. See www.doi.org/10.1002/2014JA020264
-            gdf         : dataframe of points whose conjugate points we're finding
     latname     : string
             Name of column containing latitude coordinates.
     lonname     : string
@@ -176,17 +177,17 @@ def conjcalc(gdf, latname="GLAT", lonname="GLON",
             Options are 'geopack', which uses IGRF + T89 to run
             field line traces, or 'aacgm'.
     mode        : string
-                    'S2N'     : 
+                    'S2N'     :
                                 Return station coordinates for
                                 northern hemisphere, conjugate
                                 for southern. Map appears over
                                 the Arctic. Default.
-                    'N2S'     : 
+                    'N2S'     :
                                 Return station coordinates for
                                 southern hemisphere, conjugate
                                 for northern. Map appears over
                                 the Antarctic.
-                    'flip'    : 
+                    'flip'    :
                                 Return conjugate coordinates for
                                 points regardless of hemisphere.
     is_saved    : boolean
@@ -235,7 +236,7 @@ def conjcalc(gdf, latname="GLAT", lonname="GLON",
             logger.info('Latitude encoded as string. Fixing...')
             lat = lat.replace('−', '-')
             lat = float(lat)
-            logger.info('Now floats: ' + str([lat, lon]))
+            logger.info('Now floats: %f, %f', lat, lon)
 
         if lon > 180:
             lon = lon-360
@@ -248,8 +249,7 @@ def conjcalc(gdf, latname="GLAT", lonname="GLON",
 
         # Figure out what coordinates we ultimately want to plot:
         if lat > 0:
-            logger.info('Setting Northern hemisphere for GLAT of ' + str(lat)
-                      + ' on station ' + index)
+            logger.info('Setting Northern hemisphere for GLAT of %f on station %f', lat, index)  # noqa: E501
             gdf.loc[index, 'Hemisphere'] = 'N'
             if mode in ('N2S', 'flip'):
                 gdf.loc[index, 'PLAT'] = clat
@@ -259,8 +259,7 @@ def conjcalc(gdf, latname="GLAT", lonname="GLON",
                 gdf.loc[index, 'PLON'] = lon
 
         else:
-            logger.info('Setting Southern hemisphere for GLAT of ' + str(lat)
-                      + ' on station ' + index)
+            logger.info('Setting Southern hemisphere for GLAT of %f on station %f', lat, index)  # noqa: E501
             gdf.loc[index, 'Hemisphere'] = 'S'
             if mode in ('S2N', 'flip'):
                 gdf.loc[index, 'PLAT'] = clat
@@ -325,8 +324,7 @@ def calc_mlat_rings(mlats, ut=dt.datetime.now(tz=dt.timezone.utc),
         mlats_dct[mlat] = {'glats': glats, 'glons': glons}
 
         if is_saved is True:
-            logger.info('Saving magnetic graticule for ' + str(mlat) +
-                      ' degrees magnetic latitude.')
+            logger.info('Saving magnetic graticule for %f degrees magnetic latitude.', mlat)  # noqa: E501
             filename = 'Graticule_ ' + str(mlat) + '_' + str(ut)
             directory = 'output/'
             df = pd.DataFrame({'MLAT': mlats_dct[mlat]['glats'],
@@ -353,5 +351,5 @@ def calc_mlat_rings(mlats, ut=dt.datetime.now(tz=dt.timezone.utc),
         with open('output/graticules/'+filename+'.gpx', 'w',
                   encoding="utf-8") as f:
             f.write(gpx.to_xml())
-            logger.info('Writing ' + filename + " to gpx. ")
+            logger.info("Writing %s to gpx. ", filename)
     return mlats_dct
