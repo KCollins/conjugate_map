@@ -163,8 +163,6 @@ def conjcalc(gdf, latname="GLAT", lonname="GLON",
             Name of column containing longitude coordinates.
     dtime       : datetime
             Datetime used in conversion.
-    is_verbose  : boolean
-            If set to True/1, prints debugging text
     method      : string
             Method used in conversion, passed to findconj().
             Options are 'geopack', which uses IGRF + T89 to run
