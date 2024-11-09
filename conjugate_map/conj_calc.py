@@ -50,6 +50,10 @@ def findconj(lat, lon, ut=dt.datetime.now(tz=dt.timezone.utc),
 
     method = method.lower()  # Cast method as lowercase
 
+    if np.isnan(lat) or np.isnan(lon):
+        logger.info("Received NaN for a coordinate; can't compute.")
+        return 0, 0
+
     if method == 'auto':
         if abs(lat) > limit:
             method = 'aacgm'
@@ -137,7 +141,7 @@ def conjcalc(gdf, latname="GLAT", lonname="GLON",
              is_saved=False, directory='output/', name='stations'):
 
     """Calculate the geographic latitudes and longitudes of conjugate points
-        for all points in a dataframe. Calls findconj().
+    for all points in a dataframe. Calls findconj().
 
     Parameters
     ----------
@@ -181,6 +185,7 @@ def conjcalc(gdf, latname="GLAT", lonname="GLON",
                     'flip'    :
                                 Return conjugate coordinates for
                                 points regardless of hemisphere.
+
     is_saved    : boolean
         Boolean dictating whether the final .csv is saved to
         the output directory.
