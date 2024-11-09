@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+[0.2.0] - 2024-11-09
+--------------------
+* Added logging
+* Fixed documentation bugs
+
 [0.X.X] - 2024-XX-XX
 --------------------
 * Updated style to conform to Python standards
