@@ -12,4 +12,4 @@ Main Functions
 
 .. autofunction:: conjugate_map.conjcalc
 
-.. autofunction:: conjugate_map.conjcalc
+.. autofunction:: conjugate_map.findconj
