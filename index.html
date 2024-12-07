@@ -5,33 +5,6 @@
     <title>Title</title>
 </head>
 <body>
-    <script>
-        function loadHTMLFiles(folder) {
-    const xhr = new XMLHttpRequest();
-    xhr.open('GET', folder);
-    xhr.onload = function() {
-        if (xhr.status === 200) {
-            const files = xhr.responseText.split('\n');
-            files.forEach(file => {
-                const fileUrl = `<span class="math-inline">\{folder\}/</span>{file}`;
-                const xhrFile = new XMLHttpRequest();
-                xhrFile.open('GET', fileUrl);
-                xhrFile.onload = function() {
-                    if (xhrFile.status === 200) {
-                        const div = document.createElement('div');
-                        div.innerHTML = xhrFile.responseText;
-                        document.body.appendChild(div);
-                    }
-                };
-                xhrFile.send();
-            });
-        }
-    };
-    xhr.send();
-}
-        }
-        loadHTMLFiles('notebooks/output');
-    </script>
 <p>This is some additional text that will appear after the loaded HTML files.</p>
 <a href="notebooks/output/conj-stations.html">Link to File 1</a>
 </body>
