@@ -1,13 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <title>title</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="script.js"></script>
-  </head>
-  <body>
-    <!-- page content -->
-    This is a test.
-  </body>
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <script>
+        function loadHTMLFiles(folder) {
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', folder);
+    xhr.onload = function() {
+        if (xhr.status === 200) {
+            const files = xhr.responseText.split('\n');
+            files.forEach(file => {
+                const fileUrl = `<span class="math-inline">\{folder\}/</span>{file}`;
+                const xhrFile = new XMLHttpRequest();
+                xhrFile.open('GET', fileUrl);
+                xhrFile.onload = function() {
+                    if (xhrFile.status === 200) {
+                        const div = document.createElement('div');
+                        div.innerHTML = xhrFile.responseText;
+                        document.body.appendChild(div);
+                    }
+                };
+                xhrFile.send();
+            });
+        }
+    };
+    xhr.send();
+}
+        }
+
+        loadHTMLFiles('notebooks/output');
+    </script>
+</body>
 </html>
