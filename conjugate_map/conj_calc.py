@@ -62,6 +62,13 @@ def findconj(lat, lon, ut=dt.datetime.now(tz=dt.timezone.utc),
         logger.info("Received NaN for a coordinate; can't compute.")
         return 0, 0
 
+    if method == 'qdip':
+        if importlib.util.find_spec("apexpy") is None:
+            logger.warning("The apexpy package is not installed. \
+                            To use quasidipole coordinates, run 'pip install apexpy'.\
+                            Setting method to 'auto' instead.")
+            method = "auto"
+
     if method == 'auto':
         if abs(lat) > limit:
             method = 'aacgm'
@@ -138,11 +145,6 @@ def findconj(lat, lon, ut=dt.datetime.now(tz=dt.timezone.utc),
         return glat_con, glon_con
 
     if method == "qdip":
-        if importlib.util.find_spec("apexpy") is None:
-            logger.warning("The apexpy package is not installed. \
-                            To use quasidipole coordinates, run 'pip install apexpy'.\
-                            Setting method to 'auto'.")
-            method = "auto"
         logger.info('...Calculating conjugate for %s, %s at %s via quasi-dipole coordinates:',
                     str(lat), str(lon), str(ut))
         apex_field = apexpy.Apex(ut)
