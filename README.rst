@@ -1,7 +1,7 @@
 conjugate_map
 =============
 
-|PyPI version| |DOI| |Documentation Status|
+|PyPI version| |DOI| |Documentation Status| |Coverage Status|
 
 Files and scripts relating to geomagnetic conjugate map. Run in Binder
 here: |Binder|
@@ -45,5 +45,7 @@ To test locally, run ``python -m unittest`` from top level of directory.
    :target: https://zenodo.org/doi/10.5281/zenodo.10056623
 .. |Documentation Status| image:: https://readthedocs.org/projects/conjugate-map/badge/?version=latest
    :target: https://conjugate-map.readthedocs.io/en/latest/?badge=latest
+.. |Coverage Status| image:: https://coveralls.io/repos/github/KCollins/conjugate_map/badge.svg?branch=main
+   :target: https://coveralls.io/github/KCollins/conjugate_map?branch=main
 .. |Binder| image:: https://mybinder.org/badge_logo.svg
    :target: https://mybinder.org/v2/gh/KCollins/conjugate_map/HEAD?labpath=notebooks%2FMWE.ipynb
