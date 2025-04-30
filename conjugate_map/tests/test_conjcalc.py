@@ -7,6 +7,7 @@
 
 import datetime as dt
 import unittest
+import importlib.util
 
 import conjugate_map.conj_calc as conj
 
@@ -97,6 +98,25 @@ class TestFindConjugate(unittest.TestCase):
         # Expected method to switch to 'aacgm' due to higher latitude
         self.expected_lat = 63.10539805333622
         self.expected_lon = -62.838832111320556
+
+        self.eval_findconj()
+
+    def test_qdip_method_south(self):
+        """
+        Test `findconj` with quasidipole method for a southern hemisphere point.
+        """
+        self.lat = -88  # Latitude in degrees (negative for south)
+        self.lon = 0  # Longitude in degrees
+        self.method = "qdip"
+
+        # Output if apexpy is installed:
+        if importlib.util.find_spec("apexpy") is not None:
+            self.expected_lat = 63.04719543457031
+            self.expected_lon = -62.91141891479492
+        else:
+            # expect to revert to auto
+            self.expected_lat = 63.10539805333622
+            self.expected_lon = -62.838832111320556
 
         self.eval_findconj()
 
