@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "conjugate_map"
-version = "0.2.0"
+version = "0.3.0"
 license = {file = "LICENSE"}
 description = 'Library for computing geomagnetic conjugate points.'
 maintainers = [
