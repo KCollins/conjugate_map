@@ -141,8 +141,7 @@ def findconj(lat, lon, ut=dt.datetime.now(tz=dt.timezone.utc),
         logger.info('Quasidipole coordinates for lat/lon: %s', str([mlat, mlon]))
         glat_con, glon_con, _ = apex_field.qd2geo(-mlat, mlon, height = alt)
         logger.info('Conjugate geographic lat/lon: %f, %f', glat_con, glon_con)
-        return glat_con, glon_con
-    
+        return glat_con, glon_con    
     logger.info('Method is not listed.')
     return 0, 0
 
