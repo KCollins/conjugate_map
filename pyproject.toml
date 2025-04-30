@@ -56,7 +56,7 @@ test = [
      "coverage[toml]",
      "pylint",
 ]
-include = ["apexpy"]
+apex = ["apexpy"]
 
 [project.urls]
 source = "https://github.com/KCollins/conjugate_map"

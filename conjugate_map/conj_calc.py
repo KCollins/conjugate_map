@@ -4,6 +4,7 @@
 import datetime as dt
 import logging
 import os
+import importlib.util
 
 import aacgmv2
 from geopack import geopack as gp
@@ -11,11 +12,14 @@ import gpxpy
 import gpxpy.gpx
 import numpy as np
 import pandas as pd
-import apexpy
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(filename='conjcalc.log', level=logging.INFO)
 
+try:
+    import apexpy
+except ImportError:
+    logger.warning("apexpy is not installed. Quasidipole coordinates not available.")
 
 ###############################################################################
 def findconj(lat, lon, ut=dt.datetime.now(tz=dt.timezone.utc),
@@ -31,7 +35,7 @@ def findconj(lat, lon, ut=dt.datetime.now(tz=dt.timezone.utc),
     lon         : float
             Geographic longitude of station.
     ut          : datetime
-            Datetime used in conversion.
+            Datetime used in conversion.T
     method      : string
             Defines method used in conversion. Options are 'auto', 
             'geopack', which uses IGRF + T89 to run field line traces,
@@ -134,6 +138,11 @@ def findconj(lat, lon, ut=dt.datetime.now(tz=dt.timezone.utc),
         return glat_con, glon_con
 
     if method == "qdip":
+        if importlib.util.find_spec("apexpy") is None:
+            logger.warning("The apexpy package is not installed. \
+                            To use quasidipole coordinates, run 'pip install apexpy'.\
+                            Setting method to 'auto'.")
+            method = "auto"
         logger.info('...Calculating conjugate for %s, %s at %s via quasi-dipole coordinates:',
                     str(lat), str(lon), str(ut))
         apex_field = apexpy.Apex(ut)
@@ -141,7 +150,7 @@ def findconj(lat, lon, ut=dt.datetime.now(tz=dt.timezone.utc),
         logger.info('Quasidipole coordinates for lat/lon: %s', str([mlat, mlon]))
         glat_con, glon_con, _ = apex_field.qd2geo(-mlat, mlon, height = alt)
         logger.info('Conjugate geographic lat/lon: %f, %f', glat_con, glon_con)
-        return glat_con, glon_con    
+        return glat_con, glon_con
     logger.info('Method is not listed.')
     return 0, 0
 
