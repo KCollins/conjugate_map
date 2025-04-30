@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+[0.2.0] - 2025-04-30
+--------------------
+* Added quasidipole coordinates as an option for conjugate calculations
+* Added apexpy as optional dependency
+
 [0.2.0] - 2024-11-12
 --------------------
 * Added logging
