@@ -145,8 +145,8 @@ def findconj(lat, lon, ut=dt.datetime.now(tz=dt.timezone.utc),
         return glat_con, glon_con
 
     if method == "qdip":
-        logger.info('...Calculating conjugate for %s, %s at %s via quasi-dipole coordinates:',
-                    str(lat), str(lon), str(ut))
+        logger.info('...Calculating conjugate for {:.2f}, {:.2f} at {:.2f} via quasi-dipole coordinates:'.format(
+                    lat, lon, ut))
         apex_field = apexpy.Apex(ut)
         mlat, mlon = apex_field.geo2qd(lat, lon, alt)
         logger.info('Quasidipole coordinates for lat/lon: %s', str([mlat, mlon]))
