@@ -26,11 +26,10 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install .[test]
-    
     - name: Install apexpy extras
       if: ${{ matrix.test_config == 'apex' }}
       run: pip install .[apexpy]
-    
+      
     - name: Analysing the code with pylint
       run: |
         pylint $(git ls-files '*.py')
