@@ -4,6 +4,7 @@
 import datetime as dt
 import logging
 import os
+import importlib.util
 
 import aacgmv2
 from geopack import geopack as gp
@@ -15,10 +16,14 @@ import pandas as pd
 logger = logging.getLogger(__name__)
 logging.basicConfig(filename='conjcalc.log', level=logging.INFO)
 
+try:
+    import apexpy
+except ImportError:
+    logger.warning("apexpy is not installed. Quasidipole coordinates not available.")
 
 ###############################################################################
 def findconj(lat, lon, ut=dt.datetime.now(tz=dt.timezone.utc),
-             method='aacgm', limit=60):
+             method='aacgm', alt=0, limit=60):
 
     """Calculate the geographic latitudes and longitudes of conjugate point for
         given set of coordinates.
@@ -30,11 +35,14 @@ def findconj(lat, lon, ut=dt.datetime.now(tz=dt.timezone.utc),
     lon         : float
             Geographic longitude of station.
     ut          : datetime
-            Datetime used in conversion.
+            Datetime used in conversion.T
     method      : string
-            Defines method used in conversion. Options are 'auto', 'geopack',
-            which uses IGRF + T89 to run field line traces,
-            or 'aacgm', which uses AACGM v2.
+            Defines method used in conversion. Options are 'auto', 
+            'geopack', which uses IGRF + T89 to run field line traces,
+            'aacgm', which uses AACGM v2,
+            'qdip' for quasi-dipole coordinates via apexpy.
+    alt         : float
+            Altitude of point in m. 0 by default.
     limit       : float
             Latitude limit, in degrees, used to switch between
             methods in auto mode. Default: 60.
@@ -53,6 +61,13 @@ def findconj(lat, lon, ut=dt.datetime.now(tz=dt.timezone.utc),
     if np.isnan(lat) or np.isnan(lon):
         logger.info("Received NaN for a coordinate; can't compute.")
         return 0, 0
+
+    if method == 'qdip':
+        if importlib.util.find_spec("apexpy") is None:
+            logger.warning("The apexpy package is not installed. \
+                            To use quasidipole coordinates, run 'pip install apexpy'.\
+                            Setting method to 'auto' instead.")
+            method = "auto"
 
     if method == 'auto':
         if abs(lat) > limit:
@@ -129,6 +144,15 @@ def findconj(lat, lon, ut=dt.datetime.now(tz=dt.timezone.utc),
         logger.info('Conjugate geographic lat/lon: %f, %f', glat_con, glon_con)
         return glat_con, glon_con
 
+    if method == "qdip":
+        logger.info("...Calculating conjugate for %s, %s at %s via quasi-dipole coordinates:",
+                    f"{lat:.2f}", f"{lon:.2f}", f"{ut:.2f}")
+        apex_field = apexpy.Apex(ut)
+        mlat, mlon = apex_field.geo2qd(lat, lon, alt)
+        logger.info('Quasidipole coordinates for lat/lon: %s', str([mlat, mlon]))
+        glat_con, glon_con, _ = apex_field.qd2geo(-mlat, mlon, height = alt)
+        logger.info('Conjugate geographic lat/lon: %f, %f', glat_con, glon_con)
+        return glat_con, glon_con
     logger.info('Method is not listed.')
     return 0, 0
 

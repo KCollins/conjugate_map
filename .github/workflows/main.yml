@@ -8,6 +8,14 @@ jobs:
     strategy:
       matrix:
         python-version: ["3.9", "3.10", "3.11", "3.12"]
+        numpy_ver: ["latest"]
+        test_config: ["standard"]
+        include:
+          # Apexpy integration settings
+          - python-version: "3.11"
+            numpy_ver: "latest"
+            os: ubuntu-latest
+            test_config: "apex"
     steps:
     - uses: actions/checkout@v3
     - name: Set up Python ${{ matrix.python-version }}
@@ -18,6 +26,10 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install .[test]
+    - name: Install apexpy extras
+      if: ${{ matrix.test_config == 'apex' }}
+      run: pip install .[apexpy]
+      
     - name: Analysing the code with pylint
       run: |
         pylint $(git ls-files '*.py')
