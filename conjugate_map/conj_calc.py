@@ -23,7 +23,7 @@ except ImportError:
 
 ###############################################################################
 def findconj(lat, lon, ut=dt.datetime.now(tz=dt.timezone.utc),
-             method='aacgm', alt = 0, limit=60):
+             method='aacgm', alt=0, limit=60):
 
     """Calculate the geographic latitudes and longitudes of conjugate point for
         given set of coordinates.
