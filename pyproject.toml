@@ -19,7 +19,7 @@ dependencies = [
     "pandas",
     "plotly",
 ]
-readme = "README.md"
+readme = "README.rst"
 keywords = [
     "coordinates",
     "ionosphere",
