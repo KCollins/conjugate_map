@@ -35,7 +35,7 @@ def findconj(lat, lon, ut=dt.datetime.now(tz=dt.timezone.utc),
     lon         : float
             Geographic longitude of station.
     ut          : datetime
-            Datetime used in conversion.T
+            Datetime used in conversion.
     method      : string
             Defines method used in conversion. Options are 'auto', 
             'geopack', which uses IGRF + T89 to run field line traces,
@@ -191,10 +191,6 @@ def conjcalc(gdf, latname="GLAT", lonname="GLON",
             Name of column containing longitude coordinates.
     dtime       : datetime
             Datetime used in conversion.
-    method      : string
-            Method used in conversion, passed to findconj().
-            Options are 'geopack', which uses IGRF + T89 to run
-            field line traces, or 'aacgm'.
     mode        : string
                     'S2N'     :
                                 Return station coordinates for
@@ -297,10 +293,13 @@ def conjcalc(gdf, latname="GLAT", lonname="GLON",
 
 
 def calc_mlat_rings(mlats, ut=dt.datetime.now(tz=dt.timezone.utc),
+                    method = "auto", 
                     is_saved=False):
 
     """Calculate the geographic latitudes and longitudes of a circle of points
-    for a list of magnetic latitudes.
+    for a list of magnetic latitudes. Provide a latitude in the magnetic coordinate 
+    system of your choice, and this function will return a set of geographic 
+    coordinates for points along that magnetic latitude.
 
     Parameters
     ----------
@@ -309,9 +308,18 @@ def calc_mlat_rings(mlats, ut=dt.datetime.now(tz=dt.timezone.utc),
     ut          : dt.datetime
             Datetime used in AACGMv2 conversion;
             by default, ut=dt.datetime.now(tz=dt.timezone.utc)
+    method      : string
+            Defines coordinate system used.
+            "aacgm": Calculated using aacgmv2.
+            "qdip" : Calculated using apexpy.
+            "apex" : Calculated using apexpy.
+            "gsm"  : Calculated using geopack.
+            "auto" : defaults to aacgm.
+            
     is_saved    : boolean
             If is_saved == True, saves .gpx versions.
                         to local output directory
+
 
     Returns
     -------
@@ -334,15 +342,49 @@ def calc_mlat_rings(mlats, ut=dt.datetime.now(tz=dt.timezone.utc),
         glats = []
         glons = []
         for mlon in mlons:
-            result = aacgmv2.convert_latlon(mlat, mlon, 0, ut, 'A2G')
+            if method == "aacgm" or "auto":
+                result = aacgmv2.convert_latlon(mlat, mlon, 0, ut, 'A2G')
+            elif method == "qdip":
+                # Assuming height=0 km for ground level
+                glat, glon = apex.qd2geo(mlat, mlon, 0)
+                result = (glat, glon, 0) # Format similar to aacgmv2 result
+            elif method == "apex":
+                # Assuming height=0 km for ground level
+                glat, glon = apex.apex2geo(mlat, mlon, 0)
+                result = (glat, glon, 0) # Format similar to aacgmv2 result
+            elif method == "gsm":
+                # magnetic lat/lon to XYZ:
+                R_E = 6371.0  # km
+                x_gsm = R_E * np.cos(np.deg2rad(mlat)) * np.cos(np.deg2rad(mlon))
+                y_gsm = R_E * np.cos(np.deg2rad(mlat)) * np.sin(np.deg2rad(mlon))
+                z_gsm = R_E * np.sin(np.deg2rad(mlat))
+    
+                # Get dipole tilt angle for geopack
+                ps = gp.recalc(ut.year, ut.month, ut.day, ut.hour, ut.minute, ut.second)
+                
+                # magnetic XYZ (GSM) to geographic XYZ (GEO)
+                # Note: gp.geogsm converts GEO to GSM, so we need the inverse, gp.gsmgeo.
+                x_geo, y_geo, z_geo = gp.gsmgeo(x_gsm, y_gsm, z_gsm, ps)
+    
+                # geographic XYZ to geographic lat/lon
+                # Convert Cartesian GEO (x_geo, y_geo, z_geo) to Spherical GEO (glat, glon, radius)
+                # Handle potential division by zero if x_geo, y_geo are both zero
+                if x_geo == 0 and y_geo == 0:
+                    glon = 0.0 # Longitude is undefined, set to 0 or handle as needed
+                else:
+                    glon = np.rad2deg(np.arctan2(y_geo, x_geo))
+                glat = np.rad2deg(np.arctan2(z_geo, np.sqrt(x_geo**2 + y_geo**2)))
+                
+                result = (glat, glon, 0) # Use 0 for height, similar to other methods
             glats.append(result[0])
             glons.append(result[1])
 
         mlats_dct[mlat] = {'glats': glats, 'glons': glons}
 
+
         if is_saved is True:
             logger.info('Saving magnetic graticule for %f degrees magnetic latitude.', mlat)  # noqa: E501
-            filename = 'Graticule_ ' + str(mlat) + '_' + str(ut)
+            filename = 'Graticule_ ' + str(mlat) + '_' + str(ut) + '_' + method
             directory = 'output/'
             df = pd.DataFrame({'MLAT': mlats_dct[mlat]['glats'],
                                'MLON': mlats_dct[mlat]['glons']})
