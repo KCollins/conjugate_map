@@ -1,11 +1,142 @@
+## `findconj'
 ```mermaid
-graph TD
-    A[Input x] --> B(Function g);
-    B --> C{Conjugate Space};
-    C --> D(Function h);
-    D --> E(Function g_inverse);
-    E --> F[Output y];
+graph LR
+    A["Start: findconj(lat, lon, ...)"] --> B{"lat or lon is NaN?"};
+    B -- "Yes" --> C["Return 0, 0"];
+    B -- "No" --> D["Set method to lowercase"];
+    
+    D --> E{"method is 'qdip' and apexpy not installed?"};
+    E -- "Yes" --> F["Set method to 'auto'"];
+    E -- "No" --> G{"method is 'auto'?"};
 
-    style A fill:#f9f,stroke:#333,stroke-width:2px;
-    style F fill:#f9f,stroke:#333,stroke-width:2px;
+    G -- "Yes" --> H{"abs(lat) > limit?"};
+    H -- "Yes" --> I["method = 'aacgm'"];
+    H -- "No" --> J["method = 'geopack'"];
+
+    G -- "No" --> K{"method?"};
+    I --> L["Log method"];
+    J --> L;
+    
+    L --> M{"method is 'geopack'?"};
+    K -- "'aacgm'" --> P["Use AACGMv2 to convert"];
+    K -- "'geopack'" --> M;
+    K -- "'qdip'" --> Q["Use apexpy to convert"];
+    K -- "Other" --> R["Log error and return 0,0"];
+
+    M -- "Yes" --> N["Use GeoPACK to trace field line"];
+    M -- "No" --> P;
+    
+    N --> O["Return lat, lon"];
+    P --> O;
+    Q --> O;
+    R --> O;
 ```
+
+## `conjcalc`
+```mermaid
+graph LR
+    A["Start: conjcalc(gdf, latname, ...)"] --> B["Initialize new columns"];
+    
+    B --> C{"Iterate through each row in gdf"};
+    
+    C --> D["Extract lat/lon from row"];
+    D --> E{"lon/lat is string?"};
+    E -- "Yes" --> F["Try to convert to float"];
+    E -- "No" --> G;
+    
+    F --> G["Check if lon > 180"];
+    G --> H["Call findconj(lat, lon, ...)"];
+    H --> I["Store conjugate lat/lon in gdf"];
+
+    I --> J{"Check hemisphere"};
+    J -- "lat > 0" --> K["Handle Northern hemisphere"];
+    J -- "lat <= 0" --> L["Handle Southern hemisphere"];
+    
+    K --> M{"mode in ('N2S', 'flip')?"};
+    M -- "Yes" --> N["Set PLAT/PLON to conjugate coords"];
+    M -- "No" --> O["Set PLAT/PLON to original coords"];
+    
+    L --> P{"mode in ('S2N', 'flip')?"};
+    P -- "Yes" --> Q["Set PLAT/PLON to conjugate coords"];
+    P -- "No" --> R["Set PLAT/PLON to original coords"];
+
+    N --> S["Update gdf row"];
+    O --> S;
+    Q --> S;
+    R --> S;
+
+    S --> T{"All rows processed?"};
+    T -- "No" --> C;
+    
+    T -- "Yes" --> U{"is_saved is True?"};
+    U -- "Yes" --> V["Save gdf to CSV file"];
+    U -- "No" --> W["Do not save"];
+    
+    V --> X["End: Return gdf"];
+    W --> X;
+```
+
+Here's a sequence diagram. U = user, CC  = conjcalc, FC = findconj.
+```mermaid
+sequenceDiagram
+    U->>CC: conjcalc(gdf, ...)
+    CC->>CC: For each row in gdf
+    loop for each row
+        CC->>FC: findconj(lat, lon, ...)
+        FC-->>CC: returns conjugate_point
+        CC->>CC: Process point based on 'mode'
+    end
+    CC->>CC: Check if is_saved=True
+    CC-->>U: returns modified gdf
+```
+
+## `calc_mlat_rings``
+```mermaid
+graph LR
+    A["Start: calc_mlat_rings(mlats, ut, is_saved)"] --> B{"For each mlat in mlats"};
+
+    B --> C{"For each mlon in 0 to 359"};
+    C --> D["Convert mlat, mlon to geographic coords using AACGMv2"];
+    D --> E["Append geographic coords to lists"];
+    
+    E --> F{"All mlons processed for current mlat?"};
+    F -- "No" --> C;
+    
+    F -- "Yes" --> G["Store geographic coords in mlats_dct"];
+    
+    G --> H{"is_saved is True?"};
+    H -- "Yes" --> I["Create GPX file from data"];
+    H -- "No" --> J["Do not save"];
+    
+    I --> K["Save GPX file to output directory"];
+    J --> L{"All mlats processed?"};
+
+    K --> L;
+    L -- "No" --> B;
+    L -- "Yes" --> M["End: Return mlats_dct"];
+```
+
+Sequence diagram:
+```mermaid
+sequenceDiagram
+    participant UserScript as U
+    participant calc_mlat_rings as CMR
+    participant AACGMv2 as AACGM
+    participant FileSystem as FS
+
+    U->>CMR: calc_mlat_rings(mlats, ut, is_saved)
+    CMR->>CMR: Initialize mlats_dct
+    loop For each mlat in mlats
+        loop For each mlon from 0 to 359
+            CMR->>AACGM: convert_latlon(mlat, mlon, 0, ut, 'A2G')
+            AACGM-->>CMR: returns glat, glon
+            CMR->>CMR: Append glat, glon to lists
+        end
+        CMR->>CMR: Store lists in mlats_dct
+        alt is_saved is True
+            CMR->>FS: Save GPX file
+        end
+    end
+    CMR-->>U: returns mlats_dct
+```
+
