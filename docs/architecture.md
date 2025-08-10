@@ -76,18 +76,18 @@ graph LR
     W --> X;
 ```
 
-Here's a sequence diagram. U = user, CC  = conjcalc, FC = findconj.
+Here's a sequence diagram.
 ```mermaid
 sequenceDiagram
-    U->>CC: conjcalc(gdf, ...)
-    CC->>CC: For each row in gdf
+    User->>conjcalc: conjcalc(gdf, ...)
+    conjcalc->>conjcalc: For each row in gdf
     loop for each row
-        CC->>FC: findconj(lat, lon, ...)
-        FC-->>CC: returns conjugate_point
-        CC->>CC: Process point based on 'mode'
+        conjcalc->>findconj: findconj(lat, lon, ...)
+        findconj-->>conjcalc: returns conjugate_point
+        conjcalc->>conjcalc: Process point based on 'mode'
     end
-    CC->>CC: Check if is_saved=True
-    CC-->>U: returns modified gdf
+    conjcalc->>conjcalc: Check if is_saved=True
+    conjcalc-->>User: returns modified gdf
 ```
 
 ## `calc_mlat_rings``
