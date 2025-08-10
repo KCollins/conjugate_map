@@ -119,24 +119,20 @@ graph LR
 Sequence diagram:
 ```mermaid
 sequenceDiagram
-    participant UserScript as U
-    participant calc_mlat_rings as CMR
-    participant AACGMv2 as AACGM
-    participant FileSystem as FS
 
-    U->>CMR: calc_mlat_rings(mlats, ut, is_saved)
-    CMR->>CMR: Initialize mlats_dct
+    User->>calc_mlat_rings: calc_mlat_rings(mlats, ut, is_saved)
+    calc_mlat_rings->>calc_mlat_rings: Initialize mlats_dct
     loop For each mlat in mlats
         loop For each mlon from 0 to 359
-            CMR->>AACGM: convert_latlon(mlat, mlon, 0, ut, 'A2G')
-            AACGM-->>CMR: returns glat, glon
-            CMR->>CMR: Append glat, glon to lists
+            calc_mlat_rings->>AACGM: convert_latlon(mlat, mlon, 0, ut, 'A2G')
+            AACGM-->>calc_mlat_rings: returns glat, glon
+            calc_mlat_rings->>calc_mlat_rings: Append glat, glon to lists
         end
-        CMR->>CMR: Store lists in mlats_dct
+        calc_mlat_rings->>calc_mlat_rings: Store lists in mlats_dct
         alt is_saved is True
-            CMR->>FS: Save GPX file
+            calc_mlat_rings->>Filesystem: Save GPX file
         end
     end
-    CMR-->>U: returns mlats_dct
+    calc_mlat_rings-->>User: returns mlats_dct
 ```
 
