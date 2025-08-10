@@ -33,50 +33,9 @@ graph LR
 ```
 
 ## `conjcalc`
-```mermaid
-graph LR
-    A["Start: conjcalc(gdf, latname, ...)"] --> B["Initialize new columns"];
-    
-    B --> C{"Iterate through each row in gdf"};
-    
-    C --> D["Extract lat/lon from row"];
-    D --> E{"lon/lat is string?"};
-    E -- "Yes" --> F["Try to convert to float"];
-    E -- "No" --> G;
-    
-    F --> G["Check if lon > 180"];
-    G --> H["Call findconj(lat, lon, ...)"];
-    H --> I["Store conjugate lat/lon in gdf"];
 
-    I --> J{"Check hemisphere"};
-    J -- "lat > 0" --> K["Handle Northern hemisphere"];
-    J -- "lat <= 0" --> L["Handle Southern hemisphere"];
-    
-    K --> M{"mode in ('N2S', 'flip')?"};
-    M -- "Yes" --> N["Set PLAT/PLON to conjugate coords"];
-    M -- "No" --> O["Set PLAT/PLON to original coords"];
-    
-    L --> P{"mode in ('S2N', 'flip')?"};
-    P -- "Yes" --> Q["Set PLAT/PLON to conjugate coords"];
-    P -- "No" --> R["Set PLAT/PLON to original coords"];
+Here's a sequence diagram showing how conjcalc calls findconj.
 
-    N --> S["Update gdf row"];
-    O --> S;
-    Q --> S;
-    R --> S;
-
-    S --> T{"All rows processed?"};
-    T -- "No" --> C;
-    
-    T -- "Yes" --> U{"is_saved is True?"};
-    U -- "Yes" --> V["Save gdf to CSV file"];
-    U -- "No" --> W["Do not save"];
-    
-    V --> X["End: Return gdf"];
-    W --> X;
-```
-
-Here's a sequence diagram.
 ```mermaid
 sequenceDiagram
     User->>conjcalc: conjcalc(gdf, ...)
@@ -91,32 +50,8 @@ sequenceDiagram
 ```
 
 ## `calc_mlat_rings``
-```mermaid
-graph LR
-    A["Start: calc_mlat_rings(mlats, ut, is_saved)"] --> B{"For each mlat in mlats"};
 
-    B --> C{"For each mlon in 0 to 359"};
-    C --> D["Convert mlat, mlon to geographic coords using AACGMv2"];
-    D --> E["Append geographic coords to lists"];
-    
-    E --> F{"All mlons processed for current mlat?"};
-    F -- "No" --> C;
-    
-    F -- "Yes" --> G["Store geographic coords in mlats_dct"];
-    
-    G --> H{"is_saved is True?"};
-    H -- "Yes" --> I["Create GPX file from data"];
-    H -- "No" --> J["Do not save"];
-    
-    I --> K["Save GPX file to output directory"];
-    J --> L{"All mlats processed?"};
-
-    K --> L;
-    L -- "No" --> B;
-    L -- "Yes" --> M["End: Return mlats_dct"];
-```
-
-Sequence diagram:
+Sequence diagram showing how calc_mlat_rings calls aacgmv2:
 ```mermaid
 sequenceDiagram
 
