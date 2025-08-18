@@ -34,6 +34,10 @@ graph LR
 Here's a flowchart that better addresses what the user's interested in.
 
 ```mermaid
+---
+config:
+  layout: elk
+---
 graph LR
     Start@{ shape: lean-l, label: "lat/lon,
     ut,
@@ -49,6 +53,7 @@ graph LR
     qdipq-->|No| autoq
     CheckMethod -- aacgm --> aacgm;
     geopack --> output@{ shape: lean-r, label: "Conjugate lat/lon"}
+    CheckMethod -- geopack --> geopack;
     aacgm --> output
     apexpy --> output
 
