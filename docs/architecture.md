@@ -31,6 +31,28 @@ graph LR
     Q --> O;
     R --> O;
 ```
+Here's a flowchart that better addresses what the user's interested in.
+
+```mermaid
+graph LR
+    Start@{ shape: lean-l, label: "lat/lon,
+    ut,
+    method,
+    alt,
+    limit" }
+    Start --> CheckMethod{Check method};
+    CheckMethod -- auto --> autoq{"is latitude above limit?"};
+    autoq-->|Yes| aacgm[[aacgm]]
+    autoq-->|No| geopack[[geopack]]
+    CheckMethod -- qdip --> qdipq{"Is apexpy installed?"};
+    qdipq-->|Yes| apexpy[[apexpy]]
+    qdipq-->|No| autoq
+    CheckMethod -- aacgm --> aacgm;
+    geopack --> output@{ shape: lean-r, label: "Conjugate lat/lon"}
+    aacgm --> output
+    apexpy --> output
+
+```
 
 ## `conjcalc`
 
