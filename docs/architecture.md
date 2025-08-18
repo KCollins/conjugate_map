@@ -1,37 +1,4 @@
 ## `findconj'
-```mermaid
-graph LR
-    A["Start: findconj(lat, lon, ...)"] --> B{"lat or lon is NaN?"};
-    B -- "Yes" --> C["Return 0, 0"];
-    B -- "No" --> D["Set method to lowercase"];
-    
-    D --> E{"method is 'qdip' and apexpy not installed?"};
-    E -- "Yes" --> F["Set method to 'auto'"];
-    E -- "No" --> G{"method is 'auto'?"};
-
-    G -- "Yes" --> H{"abs(lat) > limit?"};
-    H -- "Yes" --> I["method = 'aacgm'"];
-    H -- "No" --> J["method = 'geopack'"];
-
-    G -- "No" --> K{"method?"};
-    I --> L["Log method"];
-    J --> L;
-    
-    L --> M{"method is 'geopack'?"};
-    K -- "'aacgm'" --> P["Use AACGMv2 to convert"];
-    K -- "'geopack'" --> M;
-    K -- "'qdip'" --> Q["Use apexpy to convert"];
-    K -- "Other" --> R["Log error and return 0,0"];
-
-    M -- "Yes" --> N["Use GeoPACK to trace field line"];
-    M -- "No" --> P;
-    
-    N --> O["Return lat, lon"];
-    P --> O;
-    Q --> O;
-    R --> O;
-```
-Here's a flowchart that better addresses what the user's interested in.
 
 ```mermaid
 ---
@@ -39,13 +6,11 @@ config:
   layout: elk
 ---
 graph LR
-    Start@{ shape: lean-l, label: "lat/lon,
-    ut,
-    method,
-    alt,
-    limit" }
+    Start@{ shape: lean-l, label: "Inputs:
+    lat/lon, ut, method,
+    alt, limit" }
     Start --> CheckMethod{Check method};
-    CheckMethod -- auto --> autoq{"is latitude above limit?"};
+    CheckMethod -- auto --> autoq{"abs(lat) > limit?"};
     autoq-->|Yes| aacgm[[aacgm]]
     autoq-->|No| geopack[[geopack]]
     CheckMethod -- qdip --> qdipq{"Is apexpy installed?"};
